@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIsis - The Oasis of APIs</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body class="light-mode">
+    <!-- 네비게이션 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img th:src="@{/images/logo.png}" alt="APIsis Logo" class="logo-image">
+                <h1 class="logo-text">
+                    <span class="logo-part-api">API</span><span class="logo-part-oa">oa</span><span class="logo-part-sis">sis</span>
+                </h1>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#stats">Stats</a>
+                <a href="#apis">APIs</a>
+                <a href="#pricing">Pricing</a>
+                <a href="/login" class="btn-login">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="desert-animation"></div>
+        </div>
+        <div class="hero-content">
+            <img th:src="@{/images/logo.png}" alt="APIsis Logo" class="hero-logo">
+            <h1 class="hero-title">
+                <span class="logo-part-api">API</span><span class="logo-part-oa">oa</span><span class="logo-part-sis">sis</span>
+            </h1>
+            <p class="hero-subtitle">🏜️ The Oasis of APIs 💧</p>
+            <p class="hero-tagline">Quenching Your Data Thirst</p>
+            <p class="hero-description">
+                사막의 목마름을 달래줄 API의 오아시스<br>
+                다양한 도메인의 API를 한 곳에서
+            </p>
+            <div class="hero-buttons">
+                <a href="/login" class="btn-primary">시작하기</a>
+                <a href="#features" class="btn-secondary">자세히 보기</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Down</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- 기능 섹션 -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Why APIsis?</h2>
+            <p class="section-subtitle fade-in">API 개발의 새로운 기준</p>
+
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔑</div>
+                    <h3>간편한 인증</h3>
+                    <p>OAuth2 기반의 안전하고 간편한 소셜 로그인으로 빠르게 시작하세요</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚡</div>
+                    <h3>빠른 응답</h3>
+                    <p>최적화된 인프라로 평균 50ms 이내의 초고속 응답 시간을 보장합니다</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>안전한 관리</h3>
+                    <p>API 키 기반 인증과 실시간 모니터링으로 안전하게 관리하세요</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📊</div>
+                    <h3>실시간 통계</h3>
+                    <p>API 사용량과 성능 지표를 실시간으로 확인하고 분석하세요</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌐</div>
+                    <h3>다양한 API</h3>
+                    <p>날씨, 뉴스, 금융 등 다양한 도메인의 API를 한 곳에서 제공합니다</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📚</div>
+                    <h3>완벽한 문서</h3>
+                    <p>상세한 API 문서와 예제 코드로 빠르게 통합할 수 있습니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 통계 섹션 -->
+    <section id="stats" class="stats-section">
+        <div class="container">
+            <h2 class="section-title fade-in">By the Numbers</h2>
+            <p class="section-subtitle fade-in">신뢰할 수 있는 성과</p>
+
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="10">0</div>
+                    <div class="stat-label">활성 사용자</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="10000">0</div>
+                    <div class="stat-label">월간 API 호출</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="99.9">0</div>
+                    <div class="stat-label">가동률 (%)</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">평균 응답시간 (ms)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API 목록 섹션 -->
+    <section id="apis" class="apis-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Available APIs</h2>
+            <p class="section-subtitle fade-in">지속적으로 확장되는 API 컬렉션</p>
+
+            <div class="apis-grid">
+                <div class="api-card fade-in">
+                    <div class="api-icon">🌤️</div>
+                    <h3>날씨 API</h3>
+                    <p>실시간 날씨 정보와 예보 데이터</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+                <div class="api-card fade-in">
+                    <div class="api-icon">📰</div>
+                    <h3>뉴스 API</h3>
+                    <p>최신 뉴스와 트렌드 분석</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+                <div class="api-card fade-in">
+                    <div class="api-icon">💰</div>
+                    <h3>금융 API</h3>
+                    <p>환율, 주식, 암호화폐 시세</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+                <div class="api-card fade-in">
+                    <div class="api-icon">🗺️</div>
+                    <h3>지도 API</h3>
+                    <p>위치 기반 서비스와 경로 안내</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+                <div class="api-card fade-in">
+                    <div class="api-icon">🎬</div>
+                    <h3>미디어 API</h3>
+                    <p>영화, 음악, 책 정보 검색</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+                <div class="api-card fade-in">
+                    <div class="api-icon">🔮</div>
+                    <h3>AI API</h3>
+                    <p>머신러닝 기반 인공지능 서비스</p>
+                    <span class="api-status">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 가격 섹션 -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Simple Pricing</h2>
+            <p class="section-subtitle fade-in">모든 개발자를 위한 합리적인 가격</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3>Free</h3>
+                    <div class="price">
+                        <span class="price-amount">₩0</span>
+                        <span class="price-period">/월</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ API 별 일일 제공량</li>
+                        <li>✓ 거의 모든 API 접근</li>
+                        <li>✓ 커뮤니티 지원</li>
+                        <li>✓ 기본 통계</li>
+                        <li>✓ 오픈소스 Github 제공</li>
+                        <li>✓ 자체 백엔드 서버 구축 가능</li>
+                    </ul>
+                    <a href="/login" class="btn-pricing">시작하기</a>
+                </div>
+                <div class="pricing-card featured fade-in">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3>Pro</h3>
+                    <div class="price">
+                        <span class="price-amount">₩2,900</span>
+                        <span class="price-period">/월</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ 더 많은 API 별 일일 제공량</li>
+                        <li>✓ 모든 API 접근</li>
+                        <li>✓ 우선 지원</li>
+                    </ul>
+                    <a href="/login" class="btn-pricing">시작하기</a>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3>Enterprise</h3>
+                    <div class="price">
+                        <span class="price-amount">문의</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ 무제한 API 호출</li>
+                        <li>✓ 전용 클라우드 인프라</li>
+                        <li>✓ 24/7 전화 지원</li>
+                        <li>✓ SLA 보장</li>
+                    </ul>
+                    <a href="mailto:ggrteas@gmail.com" class="btn-pricing">문의하기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content fade-in">
+                <h2>지금 바로 시작하세요</h2>
+                <p>무료로 APIsis를 경험하고 당신의 프로젝트를 한 단계 업그레이드하세요</p>
+                <a href="/login" class="btn-cta">무료로 시작하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img th:src="@{/images/logo.png}" alt="APIsis Logo" class="footer-logo-img">
+                    <h3 class="logo-text">
+                        <span class="logo-part-api">API</span><span class="logo-part-oa">oa</span><span class="logo-part-sis">sis</span>
+                    </h3>
+                    <p>The Oasis of APIs</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#apis">APIs</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="/docs">Documentation</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/privacy">Privacy</a>
+                        <a href="/terms">Terms</a>
+                        <a href="/security">Security</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 APIsis. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/index.js}"></script>
+</body>
+</html>

@@ -14,7 +14,7 @@ class ViewController(
 
     @GetMapping("/")
     fun index(): String {
-        return "redirect:/login"
+        return "index"
     }
 
     @GetMapping("/login")
