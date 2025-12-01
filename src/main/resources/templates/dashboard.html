@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - APIsis</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body class="light-mode">
+    <div class="oasis-bg">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 class="logo-text">
+                    <span class="logo-part-api">API</span><span class="logo-part-oa">oa</span><span class="logo-part-sis">sis</span>
+                </h1>
+                <span>🏜️</span>
+            </div>
+            <div class="nav-user">
+                <span class="user-name" th:text="${user.name}">User</span>
+                <a href="/logout" class="logout-btn">로그아웃</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h2 class="welcome-title">
+                <span th:text="${user.name}">User</span>님, 환영합니다! 🌴
+            </h2>
+            <p class="welcome-subtitle">API 키를 생성하고 관리하세요</p>
+        </div>
+
+        <div class="api-key-section">
+            <div class="section-header">
+                <h3>API Keys</h3>
+                <button class="btn-primary" onclick="showCreateModal()">
+                    <span>+</span> 새 API 키 생성
+                </button>
+            </div>
+
+            <div id="apiKeyList" class="api-key-list">
+                <!-- API 키 목록이 여기에 동적으로 로드됩니다 -->
+                <div class="empty-state">
+                    <div class="empty-icon">🔑</div>
+                    <p>아직 생성된 API 키가 없습니다</p>
+                    <p class="empty-subtitle">첫 번째 API 키를 생성해보세요!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-card">
+                <div class="info-icon">📚</div>
+                <h4>API 문서</h4>
+                <p>사용 가능한 모든 API 엔드포인트와 사용법을 확인하세요</p>
+                <a href="/docs" class="info-link">문서 보기 →</a>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">💡</div>
+                <h4>빠른 시작</h4>
+                <p>5분 안에 첫 API 호출을 시작하는 방법</p>
+                <a href="/quick-start" class="info-link">가이드 보기 →</a>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">📊</div>
+                <h4>사용량 통계</h4>
+                <p>API 호출 현황과 통계를 실시간으로 확인하세요</p>
+                <a href="/stats" class="info-link">통계 보기 →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- API 키 생성 모달 -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>새 API 키 생성</h3>
+                <button class="modal-close" onclick="closeCreateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="keyName">키 이름</label>
+                    <input type="text" id="keyName" placeholder="예: My First API Key" class="form-input">
+                    <small>이 API 키의 용도를 설명하는 이름을 입력하세요</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCreateModal()">취소</button>
+                <button class="btn-primary" onclick="createApiKey()">생성</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>
