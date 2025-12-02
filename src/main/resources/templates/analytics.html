@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('AI 분석 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/analytics.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">AI 분석</h1>
+                <p class="page-subtitle">인공지능이 분석한 API 사용 패턴과 인사이트를 확인하세요</p>
+            </div>
+
+            <!-- AI 데이터 수집 중 -->
+            <div class="ai-collecting-state">
+                <div class="collecting-icon">
+                    🤖
+                </div>
+                <h2 class="collecting-title">AI가 데이터를 수집하고 있습니다</h2>
+                <p class="collecting-description">
+                    인공지능이 여러분의 API 사용 패턴을 분석하고 있습니다.<br>
+                    충분한 데이터가 수집되면 맞춤형 인사이트와 추천을 제공해드립니다.
+                </p>
+                <div class="collecting-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-text">
+                            <div class="feature-title">사용 패턴 분석</div>
+                            <div class="feature-desc">API 호출 패턴과 트렌드 분석</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💡</div>
+                        <div class="feature-text">
+                            <div class="feature-title">최적화 제안</div>
+                            <div class="feature-desc">성능 개선을 위한 맞춤 제안</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-text">
+                            <div class="feature-title">이상 탐지</div>
+                            <div class="feature-desc">비정상적인 패턴 자동 감지</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔮</div>
+                        <div class="feature-text">
+                            <div class="feature-title">예측 분석</div>
+                            <div class="feature-desc">미래 사용량 예측 및 권장사항</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collecting-info">
+                    <p>💡 API를 더 많이 사용할수록 더 정확한 분석 결과를 받아보실 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

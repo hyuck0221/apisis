@@ -29,9 +29,14 @@ class OAuth2SuccessHandler(
             maxAge = 30 * 24 * 60 * 60 // 30일
             path = "/"
             isHttpOnly = true
-            secure = false // HTTPS 환경에서는 true로 변경
+            secure = request.isSecure // HTTPS 환경에서 자동으로 true
         }
-        response.addCookie(cookie)
+
+        // SameSite 속성을 추가하여 쿠키 유지
+        response.addHeader("Set-Cookie",
+            "${cookie.name}=${cookie.value}; Max-Age=${cookie.maxAge}; Path=${cookie.path}; HttpOnly; SameSite=Lax" +
+            if (cookie.secure) "; Secure" else ""
+        )
 
         redirectStrategy.sendRedirect(request, response, "/dashboard")
     }

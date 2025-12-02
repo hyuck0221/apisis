@@ -44,4 +44,59 @@ class ViewController(private val userRepository: UserRepository) {
         model.addAttribute("user", user)
         return "api-keys"
     }
+
+    @GetMapping("/docs")
+    fun docs(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "api-docs"
+    }
+
+    @GetMapping("/apis")
+    fun apis(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "api-list"
+    }
+
+    @GetMapping("/usage")
+    fun usage(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "usage"
+    }
+
+    @GetMapping("/analytics")
+    fun analytics(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "analytics"
+    }
+
+    @GetMapping("/settings")
+    fun settings(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "settings"
+    }
 }

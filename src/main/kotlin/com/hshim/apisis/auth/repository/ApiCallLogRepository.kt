@@ -52,4 +52,18 @@ interface ApiCallLogRepository : JpaRepository<ApiCallLog, String> {
     fun countDistinctUrlByApiKeyValueIn(@Param("apiKeyValues") apiKeyValues: List<String>): Long
 
     fun deleteAllByApiKeyValue(apiKeyValue: String)
+
+    // 사용량 통계를 위한 쿼리
+    @Query("""
+        SELECT a FROM ApiCallLog a
+        WHERE a.apiKeyValue IN (
+            SELECT k.keyValue FROM ApiKey k WHERE k.user.id = :userId
+        )
+        AND a.calledAt BETWEEN :startTime AND :endTime
+    """)
+    fun findAllByUserIdAndCalledAtBetween(
+        @Param("userId") userId: String,
+        @Param("startTime") startTime: LocalDateTime,
+        @Param("endTime") endTime: LocalDateTime
+    ): List<ApiCallLog>
 }

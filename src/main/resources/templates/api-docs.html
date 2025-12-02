@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('API 문서 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/api-docs.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">API 문서</h1>
+                <p class="page-subtitle">모든 API의 상세 정보와 사용법을 확인하세요</p>
+            </div>
+
+            <!-- API 문서 컨텐츠 -->
+            <div class="api-docs-container">
+                <div id="apiDocsContent" class="api-docs-content">
+                    <!-- API 문서가 여기에 동적으로 로드됩니다 -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>API 문서를 불러오는 중...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:src="@{/js/api-docs.js}"></script>
+</body>
+</html>

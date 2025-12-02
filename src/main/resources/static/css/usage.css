@@ -1,0 +1,809 @@
+/* 사용량 통계 페이지 스타일 */
+
+/* 페이지 헤더 */
+.page-header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 기간 선택 */
+.period-selector {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.period-btn {
+    padding: 10px 24px;
+    border: 2px solid white;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.period-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.period-btn.active {
+    background: white;
+    color: #40E0D0;
+    border-color: white;
+}
+
+/* 사용자 지정 날짜 선택 */
+.custom-date-range {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.date-range-inputs {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.date-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.date-input-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+.date-input {
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #40E0D0;
+    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1);
+}
+
+.date-separator {
+    font-size: 18px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+.btn-apply-date {
+    padding: 12px 24px;
+    background: #40E0D0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-apply-date:hover {
+    background: #1ABC9C;
+    transform: translateY(-2px);
+}
+
+/* 통계 카드 */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stat-change {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 11px;
+}
+
+.stat-change span:first-child {
+    font-weight: 700;
+}
+
+.stat-change.positive span:first-child {
+    color: #2e7d32;
+}
+
+.stat-change.negative span:first-child {
+    color: #c62828;
+}
+
+.stat-change.neutral span:first-child {
+    color: #666;
+}
+
+.stat-change-label {
+    color: #999;
+    font-size: 10px;
+}
+
+/* 차트 카드 */
+.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.chart-container {
+    position: relative;
+    height: 250px;
+}
+
+/* 사용량 카드 */
+.usage-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.usage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.usage-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.usage-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.usage-select {
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.usage-select:focus {
+    outline: none;
+    border-color: #40E0D0;
+    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1);
+}
+
+/* 테이블 */
+.usage-table-container {
+    overflow-x: auto;
+}
+
+.usage-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.usage-table thead {
+    background: #f8f9fa;
+}
+
+.usage-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.usage-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+}
+
+.usage-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.empty-table-cell {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.api-name {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.method-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.method-badge.GET {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.method-badge.POST {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.method-badge.PUT {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.method-badge.DELETE {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.success-rate {
+    font-weight: 600;
+}
+
+.success-rate.high {
+    color: #2e7d32;
+}
+
+.success-rate.medium {
+    color: #ef6c00;
+}
+
+.success-rate.low {
+    color: #c62828;
+}
+
+/* 트래픽 카드 */
+.traffic-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.traffic-header {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.traffic-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 6px 0;
+}
+
+.traffic-subtitle {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+.traffic-heatmap {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 6px;
+    padding: 10px;
+}
+
+.traffic-hour {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    min-width: 0;
+}
+
+.traffic-hour:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.traffic-hour-label {
+    font-size: 9px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.traffic-hour-value {
+    font-weight: 700;
+    font-size: 9px;
+}
+
+/* 히트맵 색상 */
+.traffic-hour.level-0 {
+    background: #f0f0f0;
+    color: #999;
+}
+
+.traffic-hour.level-1 {
+    background: #c6f6d5;
+    color: #2e7d32;
+}
+
+.traffic-hour.level-2 {
+    background: #9ae6b4;
+    color: #2e7d32;
+}
+
+.traffic-hour.level-3 {
+    background: #68d391;
+    color: white;
+}
+
+.traffic-hour.level-4 {
+    background: #48bb78;
+    color: white;
+}
+
+.traffic-hour.level-5 {
+    background: #38a169;
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state .empty-icon {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+
+.empty-state p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.empty-state small {
+    font-size: 13px;
+    color: #999;
+}
+
+/* 그리드 반응형 재배치 */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.grid.grid-cols-4 {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.grid.grid-cols-2 {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+/* 반응형 */
+@media (max-width: 1400px) {
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .grid.grid-cols-2 {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 1200px) {
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid.grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    .chart-container {
+        height: 220px;
+    }
+
+    .traffic-heatmap {
+        gap: 4px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 900px) {
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid.grid-cols-4,
+    .grid.grid-cols-2 {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .page-header {
+        text-align: left;
+        padding: 10px 0;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
+    .period-selector {
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .period-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    .stat-card {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .stat-value {
+        font-size: 18px;
+    }
+
+    .stat-label {
+        font-size: 10px;
+    }
+
+    .chart-card {
+        padding: 16px;
+    }
+
+    .chart-container {
+        height: 200px;
+    }
+
+    .chart-title {
+        font-size: 14px;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .usage-card {
+        padding: 16px;
+    }
+
+    .usage-title {
+        font-size: 14px;
+    }
+
+    .usage-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .usage-table {
+        font-size: 11px;
+    }
+
+    .usage-table th,
+    .usage-table td {
+        padding: 8px 10px;
+    }
+
+    .traffic-card {
+        padding: 16px;
+    }
+
+    .traffic-title {
+        font-size: 14px;
+    }
+
+    .traffic-heatmap {
+        grid-template-columns: repeat(12, 1fr);
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .traffic-hour {
+        font-size: 8px;
+    }
+
+    .traffic-hour-label {
+        font-size: 8px;
+    }
+
+    .traffic-hour-value {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .date-range-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .date-input-group {
+        min-width: 100%;
+    }
+
+    .date-separator {
+        text-align: center;
+        margin: 0;
+    }
+
+    .btn-apply-date {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .period-selector {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .period-btn {
+        width: 100%;
+    }
+
+    .custom-date-range {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        gap: 0.5rem;
+    }
+
+    .stat-card {
+        flex-direction: row;
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .stat-change {
+        font-size: 10px;
+    }
+
+    .chart-container {
+        height: 180px;
+    }
+
+    .chart-title {
+        font-size: 13px;
+    }
+
+    .legend-item {
+        font-size: 10px;
+    }
+
+    .traffic-heatmap {
+        grid-template-columns: repeat(8, 1fr);
+        gap: 3px;
+        padding: 6px;
+    }
+
+    .traffic-hour {
+        font-size: 8px;
+    }
+
+    .traffic-hour-label {
+        display: none;
+    }
+
+    .traffic-hour-value {
+        font-size: 8px;
+    }
+
+    .usage-table-container {
+        font-size: 10px;
+    }
+
+    .usage-table th,
+    .usage-table td {
+        padding: 6px 8px;
+        font-size: 10px;
+    }
+
+    .method-badge {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+
+    .period-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .period-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+
+    .usage-select {
+        width: 100%;
+        font-size: 12px;
+    }
+}

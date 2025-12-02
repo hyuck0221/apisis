@@ -25,9 +25,8 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        // /dashboard, /auth 경로에만 JWT 검증 적용
         val requestPath = request.requestURI
-        if (requestPath.startsWith("/dashboard") || requestPath.startsWith("/auth")) {
+        if (!requestPath.startsWith("/api/")) {
             val token = extractToken(request)
 
             if (token != null && jwtUtil.validateToken(token)) {
@@ -44,13 +43,11 @@ class JwtAuthenticationFilter(
     }
 
     private fun extractToken(request: HttpServletRequest): String? {
-        // 1. Authorization 헤더에서 추출
         val bearerToken = request.getHeader(AUTHORIZATION_HEADER)
         if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length)
         }
 
-        // 2. 쿠키에서 추출
         val cookies = request.cookies
         if (cookies != null) {
             for (cookie in cookies) {

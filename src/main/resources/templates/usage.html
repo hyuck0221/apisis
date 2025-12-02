@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('사용량 통계 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/usage.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">사용량 통계</h1>
+                <p class="page-subtitle">API 호출 현황과 사용 패턴을 확인하세요</p>
+            </div>
+
+            <!-- 기간 선택 -->
+            <div class="period-selector mb-4">
+                <button class="period-btn active" data-period="today">오늘</button>
+                <button class="period-btn" data-period="week">최근 7일</button>
+                <button class="period-btn" data-period="month">최근 30일</button>
+                <button class="period-btn" data-period="custom">사용자 지정</button>
+            </div>
+
+            <!-- 사용자 지정 날짜 선택 -->
+            <div id="customDateRange" class="custom-date-range mb-4" style="display: none;">
+                <div class="date-range-inputs">
+                    <div class="date-input-group">
+                        <label for="startDate">시작일</label>
+                        <input type="date" id="startDate" class="date-input">
+                    </div>
+                    <div class="date-separator">~</div>
+                    <div class="date-input-group">
+                        <label for="endDate">종료일</label>
+                        <input type="date" id="endDate" class="date-input">
+                    </div>
+                    <button class="btn-apply-date" onclick="applyCustomDate()">적용</button>
+                </div>
+            </div>
+
+            <!-- 통계 요약 카드 -->
+            <div class="grid grid-cols-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                        📊
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">총 호출</div>
+                        <div class="stat-value" id="totalCalls">-</div>
+                        <div class="stat-change neutral" id="totalCallsChange" style="display: none;">
+                            <span>-</span>
+                            <span class="stat-change-label">전일 대비</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #40E0D0, #1ABC9C);">
+                        ✅
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">성공</div>
+                        <div class="stat-value" id="successCalls">-</div>
+                        <div class="stat-change neutral" id="successRate">
+                            <span>-</span>
+                            <span class="stat-change-label">성공률</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                        ❌
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">실패</div>
+                        <div class="stat-value" id="failureCalls">-</div>
+                        <div class="stat-change neutral" id="failureRate">
+                            <span>-</span>
+                            <span class="stat-change-label">실패율</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                        ⚡
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">평균 응답시간</div>
+                        <div class="stat-value" id="avgResponseTime">-</div>
+                        <div class="stat-change neutral" id="avgResponseTimeChange" style="display: none;">
+                            <span>-</span>
+                            <span class="stat-change-label">전일 대비</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 차트 섹션 -->
+            <div class="grid grid-cols-2 mb-4">
+                <!-- 호출 추이 차트 -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">API 호출 추이</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item">
+                                <span class="legend-dot" style="background: #40E0D0;"></span>
+                                성공
+                            </span>
+                            <span class="legend-item">
+                                <span class="legend-dot" style="background: #f5576c;"></span>
+                                실패
+                            </span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="callTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 응답시간 차트 -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">평균 응답시간</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item">
+                                <span class="legend-dot" style="background: #667eea;"></span>
+                                응답시간 (ms)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="responseTimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API별 사용량 -->
+            <div class="usage-card mb-4">
+                <div class="usage-header">
+                    <h3 class="usage-title">API별 호출 통계</h3>
+                    <div class="usage-controls">
+                        <select id="apiSortBy" class="usage-select">
+                            <option value="calls">호출 수</option>
+                            <option value="success">성공률</option>
+                            <option value="avgTime">평균 응답시간</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="usage-table-container">
+                    <table class="usage-table">
+                        <thead>
+                            <tr>
+                                <th>API</th>
+                                <th>메소드</th>
+                                <th>호출 수</th>
+                                <th>성공</th>
+                                <th>실패</th>
+                                <th>성공률</th>
+                                <th>평균 응답시간</th>
+                            </tr>
+                        </thead>
+                        <tbody id="apiUsageTableBody">
+                            <!-- API 사용량 데이터가 여기에 동적으로 로드됩니다 -->
+                            <tr>
+                                <td colspan="7" class="empty-table-cell">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📊</div>
+                                        <p>아직 사용량 데이터가 없습니다</p>
+                                        <small>API를 호출하면 통계가 여기에 표시됩니다</small>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 시간대별 트래픽 -->
+            <div class="traffic-card">
+                <div class="traffic-header">
+                    <h3 class="traffic-title">시간대별 트래픽 분포</h3>
+                    <p class="traffic-subtitle">24시간 동안의 API 호출 패턴</p>
+                </div>
+                <div class="traffic-heatmap" id="trafficHeatmap">
+                    <!-- 히트맵이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script th:src="@{/js/usage.js}"></script>
+</body>
+</html>

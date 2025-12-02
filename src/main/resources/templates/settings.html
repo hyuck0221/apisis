@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('설정 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/settings.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">설정</h1>
+                <p class="page-subtitle">계정 및 서비스 설정을 관리하세요</p>
+            </div>
+
+            <!-- 계정 설정 -->
+            <div class="settings-card">
+                <div class="settings-header">
+                    <h2 class="settings-title">계정 설정</h2>
+                    <p class="settings-subtitle">계정 정보 및 보안 설정</p>
+                </div>
+
+                <div class="settings-content">
+                    <!-- 계정 정보 -->
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">이름</div>
+                            <div class="setting-value" th:text="${user.name}">사용자</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">이메일</div>
+                            <div class="setting-value" th:text="${user.email}">user@example.com</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">로그인 방식</div>
+                            <div class="setting-value">
+                                <span class="provider-badge" th:text="${user.provider}">KAKAO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">가입일</div>
+                            <div class="setting-value" th:text="${#temporals.format(user.createdDate, 'yyyy년 MM월 dd일')}">2024년 01월 01일</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 계정 탈퇴 -->
+            <div class="danger-zone-card">
+                <div class="danger-header">
+                    <h2 class="danger-title">위험 구역</h2>
+                    <p class="danger-subtitle">돌이킬 수 없는 작업입니다. 신중하게 진행해주세요.</p>
+                </div>
+
+                <div class="danger-content">
+                    <div class="danger-item">
+                        <div class="danger-info">
+                            <div class="danger-item-title">계정 탈퇴</div>
+                            <div class="danger-item-desc">
+                                계정을 탈퇴하면 모든 데이터가 영구적으로 삭제됩니다.<br>
+                                • 생성한 모든 API 키가 삭제됩니다<br>
+                                • API 호출 기록이 모두 삭제됩니다<br>
+                                • 이 작업은 되돌릴 수 없습니다
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="showDeleteAccountModal()">계정 탈퇴</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 계정 탈퇴 확인 모달 -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>계정 탈퇴 확인</h3>
+                <button class="modal-close" onclick="closeDeleteAccountModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <strong>이 작업은 되돌릴 수 없습니다!</strong><br>
+                        계정을 탈퇴하면 모든 데이터가 영구적으로 삭제됩니다.
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                    정말로 계정을 탈퇴하시겠습니까?<br>
+                    탈퇴를 진행하려면 아래 "계정 탈퇴" 버튼을 클릭해주세요.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeDeleteAccountModal()">취소</button>
+                <button class="btn-danger" onclick="deleteAccount()">계정 탈퇴</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:src="@{/js/settings.js}"></script>
+</body>
+</html>

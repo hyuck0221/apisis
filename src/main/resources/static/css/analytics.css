@@ -1,0 +1,178 @@
+/* AI 분석 페이지 스타일 */
+
+/* 페이지 헤더 */
+.page-header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* AI 데이터 수집 중 상태 */
+.ai-collecting-state {
+    background: white;
+    border-radius: 16px;
+    padding: 60px 40px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.collecting-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+}
+
+.collecting-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+}
+
+.collecting-description {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+/* 기능 설명 */
+.collecting-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.feature-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: #e8f5ff;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.2);
+}
+
+.feature-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.feature-text {
+    flex: 1;
+}
+
+.feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.feature-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 안내 정보 */
+.collecting-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+}
+
+.collecting-info p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .page-header {
+        text-align: left;
+        padding: 10px 0;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
+    .ai-collecting-state {
+        padding: 40px 24px;
+    }
+
+    .collecting-icon {
+        font-size: 60px;
+    }
+
+    .collecting-title {
+        font-size: 22px;
+    }
+
+    .collecting-description {
+        font-size: 14px;
+    }
+
+    .collecting-features {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .feature-item {
+        padding: 16px;
+    }
+
+    .feature-icon {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ai-collecting-state {
+        padding: 30px 20px;
+    }
+
+    .collecting-title {
+        font-size: 20px;
+    }
+
+    .collecting-description {
+        font-size: 13px;
+    }
+
+    .feature-title {
+        font-size: 14px;
+    }
+
+    .feature-desc {
+        font-size: 12px;
+    }
+}

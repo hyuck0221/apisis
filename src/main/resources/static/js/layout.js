@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 현재 페이지 네비게이션 활성화 (추가 보강)
     highlightCurrentNav();
+
+    // API 문서 서브메뉴 로드 (모든 페이지에서 로드)
+    loadAPICategories();
 });
 
 // 현재 페이지 네비게이션 하이라이트
@@ -112,3 +115,133 @@ function animatePageLoad() {
 
 // 페이지 로드 시 애니메이션 실행
 document.addEventListener('DOMContentLoaded', animatePageLoad);
+
+// 서브메뉴 토글
+function toggleSubmenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const navItem = event.currentTarget;
+    const submenu = navItem.nextElementSibling;
+
+    navItem.classList.toggle('expanded');
+    if (submenu) {
+        submenu.classList.toggle('expanded');
+    }
+
+    // 서브메뉴가 비어있으면 API 목록 로드 시도
+    if (submenu && submenu.innerHTML.trim() === '') {
+        loadAPICategories();
+    }
+}
+
+// API 카테고리 목록 로드 및 서브메뉴 생성
+async function loadAPICategories() {
+    try {
+        const response = await fetch('/auth/docs/list');
+        if (!response.ok) return;
+
+        const apis = await response.json();
+
+        // 카테고리별로 그룹화
+        const categorizedAPIs = apis.reduce((acc, api) => {
+            if (!acc[api.category]) {
+                acc[api.category] = [];
+            }
+            acc[api.category].push(api);
+            return acc;
+        }, {});
+
+        const submenuContainer = document.getElementById('docsSubmenu');
+        if (submenuContainer && Object.keys(categorizedAPIs).length > 0) {
+            submenuContainer.innerHTML = Object.entries(categorizedAPIs).map(([category, categoryAPIs]) => {
+                const categoryId = category.toLowerCase().replace(/\s+/g, '-');
+
+                return `
+                    <div class="nav-submenu-category">
+                        <div class="nav-submenu-category-title" onclick="toggleSubCategory(event, '${categoryId}')">
+                            <svg class="submenu-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <span>${escapeHtml(category)}</span>
+                        </div>
+                        <div class="nav-submenu-apis" id="subcategory-${categoryId}">
+                            ${categoryAPIs.map(api => {
+                                const apiId = getAPIId(api);
+                                return `
+                                    <a href="/docs#${apiId}" class="nav-submenu-api-item" onclick="navigateToAPI('${apiId}')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                        </svg>
+                                        ${escapeHtml(api.title)}
+                                    </a>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 문서 페이지에서는 자동으로 서브메뉴 펼치기
+            const docsNavItem = document.querySelector('.nav-item.has-submenu[data-page="docs"]');
+            if (docsNavItem) {
+                docsNavItem.classList.add('expanded');
+                submenuContainer.classList.add('expanded');
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load API categories:', error);
+    }
+}
+
+// 서브카테고리 토글
+function toggleSubCategory(event, categoryId) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const categoryTitle = event.currentTarget;
+    const apisContainer = document.getElementById(`subcategory-${categoryId}`);
+
+    categoryTitle.classList.toggle('expanded');
+    if (apisContainer) {
+        apisContainer.classList.toggle('expanded');
+    }
+}
+
+// API ID 생성 (layout.js에서도 필요)
+function getAPIId(api) {
+    return `${api.method.toLowerCase()}-${api.url.replace(/[^a-z0-9]/gi, '-')}`;
+}
+
+// API로 네비게이션
+function navigateToAPI(apiId) {
+    if (window.location.pathname !== '/docs') {
+        window.location.href = `/docs#${apiId}`;
+    } else {
+        window.location.hash = apiId;
+        setTimeout(() => {
+            const element = document.getElementById(apiId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
+}
+
+// 카테고리로 네비게이션
+function navigateToCategory(categoryId) {
+    if (window.location.pathname !== '/docs') {
+        window.location.href = `/docs#${categoryId}`;
+    } else {
+        window.location.hash = categoryId;
+        // API 문서 페이지의 scrollToAPI 함수 호출 (있다면)
+        if (typeof scrollToAPI === 'function') {
+            setTimeout(() => {
+                const element = document.querySelector(`[data-category="${categoryId}"]`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+    }
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('API 목록 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/api-list.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">API 목록</h1>
+                <p class="page-subtitle">사용 가능한 모든 API를 확인하고 빠르게 접근하세요</p>
+            </div>
+
+            <!-- 검색 및 필터 -->
+            <div class="search-filter-section mb-4">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="API 이름, 설명, URL로 검색..." class="search-input">
+                </div>
+                <div class="filter-group">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">모든 카테고리</option>
+                    </select>
+                    <select id="methodFilter" class="filter-select">
+                        <option value="">모든 메소드</option>
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- API 목록 컨테이너 -->
+            <div class="api-list-container">
+                <div id="apiListContent" class="api-list-content">
+                    <!-- API 목록이 여기에 동적으로 로드됩니다 -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>API 목록을 불러오는 중...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:src="@{/js/api-list.js}"></script>
+</body>
+</html>
