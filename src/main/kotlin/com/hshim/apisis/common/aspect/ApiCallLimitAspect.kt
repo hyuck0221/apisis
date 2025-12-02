@@ -43,19 +43,45 @@ class ApiCallLimitAspect(
             "API call limit exceeded. Limit: ${information.callLimit}"
         )
 
-        Thread {
-            apiCallLogRepository.save(
-                ApiCallLog(
-                    apiKeyValue = apiKeyValue,
-                    url = url,
-                    method = httpMethod
-                )
-            )
-        }.start()
+        val startTime = System.currentTimeMillis()
+        var isSuccess = true
+        var httpStatus = 200
+        var errorMessage: String? = null
 
-        val result = when (val result = joinPoint.proceed()) {
-            is ResponseEntity<*> -> result.body
-            else -> result
+        val result = try {
+            when (val proceedResult = joinPoint.proceed()) {
+                is ResponseEntity<*> -> {
+                    httpStatus = proceedResult.statusCode.value()
+                    isSuccess = httpStatus in 200..299
+                    proceedResult.body
+                }
+                else -> proceedResult
+            }
+        } catch (e: Exception) {
+            isSuccess = false
+            httpStatus = 500
+            errorMessage = e.message
+            throw e
+        } finally {
+            val responseTimeMs = System.currentTimeMillis() - startTime
+
+            Thread {
+                try {
+                    apiCallLogRepository.save(
+                        ApiCallLog(
+                            apiKeyValue = apiKeyValue,
+                            url = url,
+                            method = httpMethod,
+                            responseTimeMs = responseTimeMs,
+                            isSuccess = isSuccess,
+                            httpStatus = httpStatus,
+                            errorMessage = errorMessage
+                        )
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }.start()
         }
 
         return ResponseEntity.ok(Envelope(information, currentCnt + 1, result))

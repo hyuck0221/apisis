@@ -1,8 +1,8 @@
 package com.hshim.apisis.auth.service
 
-import com.hshim.apisis.auth.entity.ApiKey
+import com.hshim.apisis.auth.model.ApiKeyResponse
+import com.hshim.apisis.auth.model.GenerateApiKeyRequest
 import com.hshim.apisis.auth.repository.ApiKeyRepository
-import com.hshim.apisis.user.entity.User
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,14 +17,16 @@ class ApiKeyCommandService(private val apiKeyRepository: ApiKeyRepository) {
         private val secureRandom = SecureRandom()
     }
 
-    fun generate(name: String, user: User): ApiKey {
+    private fun generateSecureKey(): String {
+        val bytes = ByteArray(API_KEY_LENGTH)
+        secureRandom.nextBytes(bytes)
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
+    }
+
+    fun init(request: GenerateApiKeyRequest, userId: String): ApiKeyResponse {
         val keyValue = generateSecureKey()
-        val apiKey = ApiKey(
-            keyValue = keyValue,
-            name = name,
-            user = user
-        )
-        return apiKeyRepository.save(apiKey)
+        val apiKey = apiKeyRepository.save(request.toEntity(userId, keyValue))
+        return ApiKeyResponse(apiKey)
     }
 
     @CacheEvict(value = ["apiKeys"], key = "#keyValue")
@@ -42,11 +44,5 @@ class ApiKeyCommandService(private val apiKeyRepository: ApiKeyRepository) {
     @CacheEvict(value = ["apiKeys"], key = "#keyValue")
     fun delete(keyValue: String) {
         apiKeyRepository.deleteByKeyValue(keyValue)
-    }
-
-    private fun generateSecureKey(): String {
-        val bytes = ByteArray(API_KEY_LENGTH)
-        secureRandom.nextBytes(bytes)
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
     }
 }

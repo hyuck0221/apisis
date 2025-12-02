@@ -8,6 +8,10 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f8f9fa;
     overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* 네비게이션 */
@@ -653,6 +657,19 @@ body {
 .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* 텍스트 선택 가능한 요소들 */
+.feature-card p,
+.api-card p,
+.pricing-features li,
+.hero-description,
+.cta-content p,
+.section-subtitle {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 /* 반응형 */

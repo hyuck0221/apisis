@@ -40,7 +40,7 @@ async function createApiKey() {
     }
 
     try {
-        const response = await fetch('/dashboard/keys', {
+        const response = await fetch('/auth/keys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ function maskApiKey(keyValue) {
 // API 키 목록 로드
 async function loadApiKeys() {
     try {
-        const response = await fetch('/dashboard/keys');
+        const response = await fetch('/auth/keys');
 
         if (!response.ok) {
             throw new Error('API 키 목록을 불러오는데 실패했습니다');
@@ -106,19 +106,23 @@ async function loadApiKeys() {
                 </div>
                 <div class="key-info">
                     <div class="key-value-display">
-                        <code class="api-key-value masked" id="key-${key.keyValue}" data-key="${key.keyValue}">${maskApiKey(key.keyValue)}</code>
-                        <button class="btn-icon" onclick="toggleKeyVisibility('${key.keyValue}')" title="키 보기/숨기기">
-                            <svg id="icon-${key.keyValue}" class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-                        <button class="btn-icon" onclick="copyKeyValue('${key.keyValue}')" title="복사">
-                            <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                        </button>
+                        <div class="key-value-row">
+                            <code class="api-key-value masked" id="key-${key.keyValue}" data-key="${key.keyValue}">${maskApiKey(key.keyValue)}</code>
+                        </div>
+                        <div class="key-value-actions">
+                            <button class="btn-icon" onclick="toggleKeyVisibility('${key.keyValue}')" title="키 보기/숨기기">
+                                <svg id="icon-${key.keyValue}" class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                            <button class="btn-icon" onclick="copyKeyValue('${key.keyValue}')" title="복사">
+                                <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="key-meta">
                         <span>생성일: ${formatDate(key.createdDate)}</span>
@@ -147,7 +151,7 @@ async function activateKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/dashboard/keys/${keyValue}/activate`, {
+        const response = await fetch(`/auth/keys/${keyValue}/activate`, {
             method: 'PUT'
         });
 
@@ -170,7 +174,7 @@ async function deactivateKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/dashboard/keys/${keyValue}/deactivate`, {
+        const response = await fetch(`/auth/keys/${keyValue}/deactivate`, {
             method: 'PUT'
         });
 
@@ -193,7 +197,7 @@ async function deleteKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/dashboard/keys/${keyValue}`, {
+        const response = await fetch(`/auth/keys/${keyValue}`, {
             method: 'DELETE'
         });
 
@@ -222,7 +226,38 @@ function copyKeyValue(keyValue) {
 // 모달 외부 클릭시 닫기
 setupModalCloseOnClickOutside('createModal', closeCreateModal);
 
-// 페이지 로드시 API 키 목록 로드
+// 대시보드 통계 로드
+async function loadDashboardStats() {
+    try {
+        const response = await fetch('/api/dashboard/stats');
+
+        if (!response.ok) {
+            throw new Error('통계를 불러오는데 실패했습니다');
+        }
+
+        const stats = await response.json();
+
+        // API 키 개수
+        document.querySelector('.grid-cols-4 .card:nth-child(1) div:nth-child(2) div:first-child').textContent = stats.apiKeyCount;
+
+        // API 호출 수
+        document.querySelector('.grid-cols-4 .card:nth-child(2) div:nth-child(2) div:first-child').textContent = stats.totalApiCalls.toLocaleString();
+
+        // 평균 응답 시간
+        document.querySelector('.grid-cols-4 .card:nth-child(3) div:nth-child(2) div:first-child').textContent = stats.averageResponseTimeMs + 'ms';
+
+        // 성공률
+        document.querySelector('.grid-cols-4 .card:nth-child(4) div:nth-child(2) div:first-child').textContent = stats.successRate.toFixed(1) + '%';
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+}
+
+// 페이지 로드시 API 키 목록 및 통계 로드
 document.addEventListener('DOMContentLoaded', function() {
     loadApiKeys();
+    loadDashboardStats();
+
+    // 30초마다 통계 갱신
+    setInterval(loadDashboardStats, 30000);
 });

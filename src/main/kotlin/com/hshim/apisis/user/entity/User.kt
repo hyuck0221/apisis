@@ -29,6 +29,14 @@ class User(
     val createdDate: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
+        fun of(userId: String) = User(
+            id = userId,
+            email = "",
+            name = "",
+            provider = OAuth2Provider.KAKAO,
+            providerId = "",
+        )
+
         fun ofKakao(oAuth2User: OAuth2User): User {
             val kakaoAccount = oAuth2User.getAttribute<Map<String, Any>>("kakao_account")!!
             val profile = kakaoAccount["profile"] as Map<String, Any>
