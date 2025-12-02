@@ -33,4 +33,15 @@ class ViewController(private val userRepository: UserRepository) {
         model.addAttribute("user", user)
         return "dashboard"
     }
+
+    @GetMapping("/api-keys")
+    fun apiKeys(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+            ?: return "redirect:/login"
+
+        model.addAttribute("user", user)
+        return "api-keys"
+    }
 }

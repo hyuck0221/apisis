@@ -52,118 +52,108 @@
     margin-top: 10px;
 }
 
-/* API 키 카드 */
-.api-key-card {
-    background: var(--hover-bg);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
+/* API 키 아이템 - 극단적 심플 */
+.api-key-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.api-key-card:hover {
-    background: var(--hover-bg-darker);
-    transform: translateX(5px);
-    border-color: rgba(64, 224, 208, 0.3);
+.api-key-item:last-child {
+    border-bottom: none;
 }
 
-.key-header {
+.key-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 16px;
     margin-bottom: 10px;
 }
 
-.key-info {
-    flex: 1;
-}
-
-.key-info h4 {
-    color: var(--text-primary);
-    margin: 0;
-    font-size: 18px;
+.key-name {
+    font-size: 14px;
     font-weight: 600;
+    color: #000;
+    flex-shrink: 0;
+    min-width: 120px;
 }
 
-.key-value-display {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 12px;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 12px;
-    border: 2px solid #e0e0e0;
-    width: 100%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.key-value-row {
+.key-value-container {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.key-value-actions {
-    display: flex;
     gap: 8px;
 }
 
 .api-key-value {
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
-    font-size: 15px;
-    font-weight: 500;
-    color: #2c3e50;
-    letter-spacing: 0.5px;
-    padding: 4px 8px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 6px;
-    user-select: text;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    transition: all 0.3s ease;
     flex: 1;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    color: #333;
+    letter-spacing: 0.5px;
+    user-select: all;
 }
 
 .api-key-value.masked {
-    color: #95a5a6;
-    letter-spacing: 2px;
+    color: #aaa;
 }
 
-.key-meta {
-    font-size: 14px;
-    color: var(--text-secondary);
-    display: flex;
-    gap: 15px;
+.key-icon-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+    display: inline-flex;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.key-status {
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
+.key-icon-btn:hover {
+    color: #000;
 }
 
-.key-status.active {
-    background: #d4edda;
-    color: #155724;
+.key-icon-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
 }
 
-.key-status.inactive {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-.key-actions {
+.key-actions-row {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    padding-left: 136px;
+}
+
+.key-action-btn {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.key-action-btn:hover {
+    border-color: #999;
+    color: #000;
+    background: #f9f9f9;
+}
+
+.key-action-btn.danger:hover {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: #fff5f5;
+}
+
+.key-info-text {
+    font-size: 12px;
+    color: #999;
 }
 
 /* 정보 링크 */
@@ -243,27 +233,37 @@
         font-size: 14px;
     }
 
-    .api-key-card {
-        padding: 16px;
+    .api-key-item {
+        padding: 16px 0;
     }
 
-    .key-header {
+    .key-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 8px;
     }
 
-    .key-actions {
+    .key-name {
+        min-width: auto;
+    }
+
+    .key-value-container {
         width: 100%;
     }
 
-    .key-actions .btn-small {
-        flex: 1;
+    .api-key-value {
+        font-size: 11px;
+        word-break: break-all;
     }
 
-    .key-value-display {
-        flex-direction: column;
-        gap: 8px;
+    .key-actions-row {
+        padding-left: 0;
+        flex-wrap: wrap;
+    }
+
+    .key-action-btn {
+        flex: 1;
+        min-width: 80px;
     }
 }
 
@@ -276,11 +276,16 @@
         padding: 40px 16px;
     }
 
-    .key-info h4 {
-        font-size: 16px;
+    .key-name {
+        font-size: 13px;
     }
 
     .api-key-value {
-        font-size: 13px;
+        font-size: 10px;
+    }
+
+    .key-action-btn {
+        font-size: 11px;
+        padding: 4px 8px;
     }
 }

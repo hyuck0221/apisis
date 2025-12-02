@@ -53,10 +53,10 @@ async function createApiKey() {
         }
 
         closeCreateModal();
-        alert('API 키가 생성되었습니다!');
 
-        // 목록 새로고침
+        // 목록 및 통계 새로고침
         loadApiKeys();
+        loadDashboardStats();
     } catch (error) {
         console.error('Error:', error);
         alert('API 키 생성 중 오류가 발생했습니다');
@@ -93,43 +93,34 @@ async function loadApiKeys() {
         }
 
         listContainer.innerHTML = keys.map(key => `
-            <div class="api-key-card">
-                <div class="key-header">
-                    <h4>${escapeHtml(key.name)}</h4>
-                    <div class="key-actions">
-                        ${key.active ?
-                            `<button class="btn-small btn-warning" onclick="deactivateKey('${key.keyValue}')">비활성화</button>` :
-                            `<button class="btn-small btn-success" onclick="activateKey('${key.keyValue}')">활성화</button>`
-                        }
-                        <button class="btn-small btn-danger" onclick="deleteKey('${key.keyValue}')">삭제</button>
+            <div class="api-key-item">
+                <div class="key-row">
+                    <div class="key-name">${escapeHtml(key.name)}</div>
+                    <div class="key-value-container">
+                        <code class="api-key-value masked" id="key-${key.keyValue}">${maskApiKey(key.keyValue)}</code>
+                        <button class="key-icon-btn" onclick="toggleKeyVisibility('${key.keyValue}')" title="보기/숨기기">
+                            <svg id="icon-${key.keyValue}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                        <button class="key-icon-btn" onclick="copyKeyValue('${key.keyValue}')" title="복사">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <div class="key-info">
-                    <div class="key-value-display">
-                        <div class="key-value-row">
-                            <code class="api-key-value masked" id="key-${key.keyValue}" data-key="${key.keyValue}">${maskApiKey(key.keyValue)}</code>
-                        </div>
-                        <div class="key-value-actions">
-                            <button class="btn-icon" onclick="toggleKeyVisibility('${key.keyValue}')" title="키 보기/숨기기">
-                                <svg id="icon-${key.keyValue}" class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                            </button>
-                            <button class="btn-icon" onclick="copyKeyValue('${key.keyValue}')" title="복사">
-                                <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="key-meta">
-                        <span>생성일: ${formatDate(key.createdDate)}</span>
-                        <span class="key-status ${key.active ? 'active' : 'inactive'}">
-                            ${key.active ? '✓ 활성' : '✗ 비활성'}
-                        </span>
-                    </div>
+                <div class="key-actions-row">
+                    <span class="key-info-text">${formatDate(key.createdDate)}</span>
+                    <span class="key-info-text">·</span>
+                    <span class="key-info-text">${key.active ? '활성' : '비활성'}</span>
+                    ${key.active ?
+                        `<button class="key-action-btn" onclick="deactivateKey('${key.keyValue}')">비활성화</button>` :
+                        `<button class="key-action-btn" onclick="activateKey('${key.keyValue}')">활성화</button>`
+                    }
+                    <button class="key-action-btn danger" onclick="deleteKey('${key.keyValue}')">삭제</button>
                 </div>
             </div>
         `).join('');
@@ -161,6 +152,7 @@ async function activateKey(keyValue) {
 
         showToast('✓ API 키가 활성화되었습니다');
         loadApiKeys();
+        loadDashboardStats();
     } catch (error) {
         console.error('Error:', error);
         showToast('✗ API 키 활성화 중 오류가 발생했습니다');
@@ -184,6 +176,7 @@ async function deactivateKey(keyValue) {
 
         showToast('✓ API 키가 비활성화되었습니다');
         loadApiKeys();
+        loadDashboardStats();
     } catch (error) {
         console.error('Error:', error);
         showToast('✗ API 키 비활성화 중 오류가 발생했습니다');
@@ -207,6 +200,7 @@ async function deleteKey(keyValue) {
 
         showToast('✓ API 키가 삭제되었습니다');
         loadApiKeys();
+        loadDashboardStats();
     } catch (error) {
         console.error('Error:', error);
         showToast('✗ API 키 삭제 중 오류가 발생했습니다');
@@ -229,7 +223,7 @@ setupModalCloseOnClickOutside('createModal', closeCreateModal);
 // 대시보드 통계 로드
 async function loadDashboardStats() {
     try {
-        const response = await fetch('/api/dashboard/stats');
+        const response = await fetch('/auth/stats');
 
         if (!response.ok) {
             throw new Error('통계를 불러오는데 실패했습니다');
@@ -243,7 +237,7 @@ async function loadDashboardStats() {
         // API 호출 수
         document.querySelector('.grid-cols-4 .card:nth-child(2) div:nth-child(2) div:first-child').textContent = stats.totalApiCalls.toLocaleString();
 
-        // 평균 응답 시간
+        // 평균 처리 시간
         document.querySelector('.grid-cols-4 .card:nth-child(3) div:nth-child(2) div:first-child').textContent = stats.averageResponseTimeMs + 'ms';
 
         // 성공률

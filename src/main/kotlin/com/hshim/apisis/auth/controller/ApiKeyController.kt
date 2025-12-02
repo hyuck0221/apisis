@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth/keys")
-class DashboardApiKeyController(
+class ApiKeyController(
     private val apiKeyQueryService: ApiKeyQueryService,
     private val apiKeyCommandService: ApiKeyCommandService,
 ) {

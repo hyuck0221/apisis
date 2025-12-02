@@ -2,6 +2,9 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('대시보드 - APIsis')}">
 </head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
 <body class="light-mode">
     <!-- 사이드바 -->
     <aside th:replace="~{fragments/layout :: sidebar}"></aside>
@@ -55,7 +58,7 @@
                         </div>
                         <div>
                             <div style="font-size: 24px; font-weight: 700; color: #333;">0ms</div>
-                            <div style="font-size: 14px; color: #999;">평균 응답</div>
+                            <div style="font-size: 14px; color: #999;">평균 처리</div>
                         </div>
                     </div>
                 </div>

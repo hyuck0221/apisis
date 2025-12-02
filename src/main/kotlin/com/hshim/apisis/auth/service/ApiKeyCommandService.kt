@@ -2,6 +2,7 @@ package com.hshim.apisis.auth.service
 
 import com.hshim.apisis.auth.model.ApiKeyResponse
 import com.hshim.apisis.auth.model.GenerateApiKeyRequest
+import com.hshim.apisis.auth.repository.ApiCallLogRepository
 import com.hshim.apisis.auth.repository.ApiKeyRepository
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
@@ -11,7 +12,10 @@ import java.util.*
 
 @Service
 @Transactional
-class ApiKeyCommandService(private val apiKeyRepository: ApiKeyRepository) {
+class ApiKeyCommandService(
+    private val apiKeyRepository: ApiKeyRepository,
+    private val apiCallLogRepository: ApiCallLogRepository
+) {
     companion object {
         private const val API_KEY_LENGTH = 32
         private val secureRandom = SecureRandom()
@@ -43,6 +47,7 @@ class ApiKeyCommandService(private val apiKeyRepository: ApiKeyRepository) {
 
     @CacheEvict(value = ["apiKeys"], key = "#keyValue")
     fun delete(keyValue: String) {
+        apiCallLogRepository.deleteAllByApiKeyValue(keyValue)
         apiKeyRepository.deleteByKeyValue(keyValue)
     }
 }

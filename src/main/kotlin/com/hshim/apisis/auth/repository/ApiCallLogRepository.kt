@@ -32,4 +32,24 @@ interface ApiCallLogRepository : JpaRepository<ApiCallLog, String> {
     """
     )
     fun getSuccessRateByApiKeyValueIn(@Param("apiKeyValues") apiKeyValues: List<String>): Double?
+
+    @Query("SELECT AVG(a.responseTimeMs) FROM ApiCallLog a WHERE a.apiKeyValue = :apiKeyValue")
+    fun getAverageResponseTimeByApiKeyValue(@Param("apiKeyValue") apiKeyValue: String): Double?
+
+    @Query(
+        """
+        SELECT CAST(SUM(CASE WHEN a.isSuccess = true THEN 1 ELSE 0 END) AS double) / COUNT(a) * 100
+        FROM ApiCallLog a
+        WHERE a.apiKeyValue = :apiKeyValue
+    """
+    )
+    fun getSuccessRateByApiKeyValue(@Param("apiKeyValue") apiKeyValue: String): Double?
+
+    @Query("SELECT COUNT(DISTINCT a.url) FROM ApiCallLog a WHERE a.apiKeyValue = :apiKeyValue")
+    fun countDistinctUrlByApiKeyValue(@Param("apiKeyValue") apiKeyValue: String): Long
+
+    @Query("SELECT COUNT(DISTINCT a.url) FROM ApiCallLog a WHERE a.apiKeyValue IN :apiKeyValues")
+    fun countDistinctUrlByApiKeyValueIn(@Param("apiKeyValues") apiKeyValues: List<String>): Long
+
+    fun deleteAllByApiKeyValue(apiKeyValue: String)
 }
