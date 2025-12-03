@@ -29,17 +29,32 @@ class JwtAuthenticationFilter(
         if (!requestPath.startsWith("/api/")) {
             val token = extractToken(request)
 
-            if (token != null && jwtUtil.validateToken(token)) {
-                val userId = jwtUtil.getUserIdFromToken(token)
-                if (userId != null) {
-                    val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
-                    val authentication = UsernamePasswordAuthenticationToken(userId, null, authorities)
-                    SecurityContextHolder.getContext().authentication = authentication
+            if (token != null) {
+                try {
+                    if (jwtUtil.validateToken(token)) {
+                        val userId = jwtUtil.getUserIdFromToken(token)
+                        if (userId != null) {
+                            val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
+                            val authentication = UsernamePasswordAuthenticationToken(userId, null, authorities)
+                            SecurityContextHolder.getContext().authentication = authentication
+                        }
+                    } else {
+                        // 유효하지 않은 토큰이면 쿠키 삭제
+                        clearJWTCookie(response)
+                    }
+                } catch (e: Exception) {
+                    // 토큰 검증 실패 시 쿠키 삭제
+                    clearJWTCookie(response)
                 }
             }
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    private fun clearJWTCookie(response: HttpServletResponse) {
+        response.addHeader("Set-Cookie",
+            "$JWT_COOKIE_NAME=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax")
     }
 
     private fun extractToken(request: HttpServletRequest): String? {

@@ -19,7 +19,15 @@ class ViewController(private val userRepository: UserRepository) {
     @GetMapping("/login")
     fun login(): String {
         val userId = getCurrentUserIdOrNull()
-        if (userId != null) return "redirect:/dashboard"
+        if (userId != null) {
+            // 사용자 존재 여부 확인 후 리다이렉트
+            val user = userRepository.findByIdOrNull(userId)
+            if (user != null) {
+                return "redirect:/dashboard"
+            }
+            // 사용자가 없으면 인증 정보 제거
+            SecurityContextHolder.clearContext()
+        }
         return "login"
     }
 
@@ -28,7 +36,11 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            // 사용자가 없으면 인증 정보 제거 후 리다이렉트
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "dashboard"
@@ -39,7 +51,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "api-keys"
@@ -50,7 +65,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "api-docs"
@@ -61,7 +79,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "api-list"
@@ -72,7 +93,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "usage"
@@ -83,7 +107,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "analytics"
@@ -94,7 +121,10 @@ class ViewController(private val userRepository: UserRepository) {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
-            ?: return "redirect:/login"
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
 
         model.addAttribute("user", user)
         return "settings"

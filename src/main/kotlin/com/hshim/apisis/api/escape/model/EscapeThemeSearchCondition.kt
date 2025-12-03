@@ -1,0 +1,28 @@
+package com.hshim.apisis.api.escape.model
+
+class EscapeThemeSearchCondition(
+    val search: String = "",
+    val onlyOpen: Boolean = true,
+    val areas: List<String> = emptyList(),
+    val locations: List<String> = emptyList(),
+    val startPlaytime: Int = 0,
+    val endPlaytime: Int?,
+    val startPrice: Int = 0,
+    val endPrice: Int?,
+    val startDifficulty: Double = 0.0,
+    val endDifficulty: Double?,
+    val startFear: Double = 0.0,
+    val endFear: Double?,
+    val startActivity: Double = 0.0,
+    val endActivity: Double?,
+    val startSatisfy: Double = 0.0,
+    val endSatisfy: Double?,
+    val startProblem: Double = 0.0,
+    val endProblem: Double?,
+    val startStory: Double = 0.0,
+    val endStory: Double?,
+    val startInterior: Double = 0.0,
+    val endInterior: Double?,
+    val startAct: Double = 0.0,
+    val endAct: Double?,
+)

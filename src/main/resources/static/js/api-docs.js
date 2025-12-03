@@ -85,6 +85,8 @@ async function loadAPIDocs() {
 function generateAPIItem(api) {
     const apiId = getAPIId(api);
     const hasRequest = api.requestSchema && Object.keys(api.requestSchema).length > 0;
+    const hasRequestInfos = api.requestInfos && api.requestInfos.length > 0;
+    const hasResponseInfos = api.responseInfos && api.responseInfos.length > 0;
 
     return `
         <div class="api-item" id="${apiId}">
@@ -121,7 +123,19 @@ function generateAPIItem(api) {
             ${hasRequest ? `
                 <div class="schema-section">
                     <div class="schema-title">Request</div>
-                    <div class="schema-content">
+                    ${hasRequestInfos ? `
+                        <div class="field-info-table">
+                            ${renderFieldInfoTable(api.requestInfos)}
+                        </div>
+                    ` : ''}
+                    <div class="schema-content" data-schema='${JSON.stringify(api.requestSchema)}'>
+                        <button class="schema-copy-btn" onclick="copySchemaFromParent(this)" title="복사">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            복사
+                        </button>
                         <pre>${renderJSONSchema(api.requestSchema)}</pre>
                     </div>
                 </div>
@@ -129,11 +143,72 @@ function generateAPIItem(api) {
 
             <div class="schema-section">
                 <div class="schema-title">Response</div>
-                <div class="schema-content">
+                ${hasResponseInfos ? `
+                    <div class="field-info-table">
+                        ${renderFieldInfoTable(api.responseInfos)}
+                    </div>
+                ` : ''}
+                <div class="schema-content" data-schema='${JSON.stringify(api.responseSchema)}'>
+                    <button class="schema-copy-btn" onclick="copySchemaFromParent(this)" title="복사">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        복사
+                    </button>
                     <pre>${renderJSONSchema(api.responseSchema)}</pre>
                 </div>
             </div>
         </div>
+    `;
+}
+
+// 필드 정보 테이블 렌더링
+function renderFieldInfoTable(fieldInfos) {
+    if (!fieldInfos || fieldInfos.length === 0) {
+        return '';
+    }
+
+    // 중복 제거 및 정렬
+    const uniqueFields = fieldInfos.filter((field, index, self) =>
+        index === self.findIndex(f => f.path === field.path)
+    );
+
+    const rows = uniqueFields.map(field => {
+        const paramTypeBadge = field.parameterType
+            ? `<span class="param-type-badge ${field.parameterType.toLowerCase()}">${field.parameterType}</span>`
+            : '';
+        const nullableBadge = field.nullable
+            ? '<span class="nullable-badge">nullable</span>'
+            : '<span class="required-badge">required</span>';
+
+        return `
+            <tr>
+                <td class="field-path"><code>${escapeHtml(field.path)}</code></td>
+                <td class="field-type"><code>${escapeHtml(field.type)}</code></td>
+                <td class="field-badges">
+                    ${paramTypeBadge}
+                    ${nullableBadge}
+                </td>
+                <td class="field-description">${escapeHtml(field.description) || '-'}</td>
+            </tr>
+        `;
+    }).join('');
+
+    return `
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <th>필드명</th>
+                    <th>타입</th>
+                    <th>속성</th>
+                    <th>설명</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
     `;
 }
 
@@ -229,12 +304,34 @@ function copyAPILink(apiId) {
 
 // URL 복사
 function copyURL(url) {
-    navigator.clipboard.writeText(url).then(() => {
+    const fullUrl = `${window.location.origin}${url}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
         showToast('✓ URL이 복사되었습니다');
     }).catch(err => {
         console.error('복사 실패:', err);
         showToast('✗ URL 복사에 실패했습니다');
     });
+}
+
+// 스키마 복사
+function copySchemaFromParent(button) {
+    const schemaContent = button.parentElement;
+    const schemaData = schemaContent.getAttribute('data-schema');
+
+    try {
+        const schema = JSON.parse(schemaData);
+        const formatted = JSON.stringify(schema, null, 2);
+
+        navigator.clipboard.writeText(formatted).then(() => {
+            showToast('✓ JSON이 복사되었습니다');
+        }).catch(err => {
+            console.error('복사 실패:', err);
+            showToast('✗ JSON 복사에 실패했습니다');
+        });
+    } catch (e) {
+        console.error('JSON 파싱 실패:', e);
+        showToast('✗ JSON 복사에 실패했습니다');
+    }
 }
 
 // 카테고리 ID 생성

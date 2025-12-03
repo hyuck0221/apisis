@@ -61,3 +61,9 @@ kemi:
       - gemini-2.5-flash-lite
       - gemini-2.0-flash
       - gemini-2.0-flash-lite
+
+escape:
+  theme:
+    crawling-url: https://q.keigon.net/indexes/qrooms/search
+    crawling-authorization: Bearer F3WdGD8S3783e99ba7d4508fa06c0dc6d1822e2bd73b87bfe2dd204eae14eb34220cda75
+    photo-base-url: https://cdn.keigon.net

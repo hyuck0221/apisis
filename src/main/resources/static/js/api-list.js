@@ -150,7 +150,8 @@ function goToAPIDoc(apiId) {
 
 // URL 복사
 function copyURL(url) {
-    navigator.clipboard.writeText(url).then(() => {
+    const fullUrl = `${window.location.origin}${url}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
         showToast('✓ URL이 복사되었습니다');
     }).catch(err => {
         console.error('복사 실패:', err);

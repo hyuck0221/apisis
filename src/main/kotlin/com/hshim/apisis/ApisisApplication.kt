@@ -1,10 +1,14 @@
 package com.hshim.apisis
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.scheduling.annotation.EnableScheduling
 import java.util.TimeZone
 
 @SpringBootApplication
+@EnableScheduling
+@ConfigurationPropertiesScan
 class ApisisApplication
 
 fun main(args: Array<String>) {

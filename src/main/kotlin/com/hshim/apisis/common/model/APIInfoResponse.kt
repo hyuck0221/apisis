@@ -11,14 +11,18 @@ data class APIInfoResponse (
     val version: String,
     val callLimit: Long,
     val requestSchema: Map<String, Any>,
-    val responseSchema: Map<String, Any>
+    val responseSchema: Map<String, Any>,
+    val requestInfos: List<FieldInfo>,
+    val responseInfos: List<FieldInfo>
 ) {
     constructor(
         url: String,
         method: String,
         information: Information,
         requestSchema: Map<String, Any>,
-        responseSchema: Map<String, Any>
+        responseSchema: Map<String, Any>,
+        requestInfos: List<FieldInfo>,
+        responseInfos: List<FieldInfo>
     ): this (
         url = url,
         method = method,
@@ -29,5 +33,7 @@ data class APIInfoResponse (
         callLimit = information.callLimit,
         requestSchema = requestSchema,
         responseSchema = responseSchema,
+        requestInfos = requestInfos,
+        responseInfos = responseInfos
     )
 }
