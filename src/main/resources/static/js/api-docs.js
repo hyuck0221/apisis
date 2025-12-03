@@ -111,13 +111,21 @@ function generateAPIItem(api) {
                     </div>
                     ${api.callLimit > 0 ? `<div class="api-meta"><span class="api-limit">호출 제한: ${api.callLimit}회/일</span></div>` : ''}
                 </div>
-                <a href="#${apiId}" class="api-link" onclick="copyAPILink('${apiId}')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                    링크
-                </a>
+                <div class="api-actions">
+                    <a href="/playground?api=${encodeURIComponent(api.url)}&method=${api.method}" class="try-api-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        사용해보기
+                    </a>
+                    <a href="#${apiId}" class="api-link" onclick="copyAPILink('${apiId}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        링크
+                    </a>
+                </div>
             </div>
 
             ${hasRequest ? `

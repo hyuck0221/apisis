@@ -5,5 +5,5 @@ class EscapeCafeBoundsSearchCondition(
     val maxLat: Double,
     val minLng: Double,
     val maxLng: Double,
-    val onlyOpen: Boolean = false,
+    val onlyOpen: Boolean?,
 )

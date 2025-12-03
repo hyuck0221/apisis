@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('API 놀이터 - APIsis')}">
+</head>
+<head>
+    <link rel="stylesheet" th:href="@{/css/playground.css}">
+</head>
+<body class="light-mode">
+    <!-- 사이드바 -->
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <!-- 오버레이 (모바일용) -->
+    <div th:replace="~{fragments/layout :: overlay}"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 모바일 헤더 -->
+        <header th:replace="~{fragments/layout :: header}"></header>
+
+        <!-- 콘텐츠 래퍼 -->
+        <div class="content-wrapper">
+            <!-- 페이지 헤더 -->
+            <div class="page-header mb-4">
+                <h1 class="page-title">API 놀이터</h1>
+                <p class="page-subtitle">등록된 API를 직접 테스트해보세요</p>
+            </div>
+
+            <!-- Playground 컨텐츠 -->
+            <div class="playground-container">
+                <!-- API Key 선택 -->
+                <div class="playground-section">
+                    <div class="section-header">
+                        <h3 class="section-title">1. API Key 선택</h3>
+                    </div>
+                    <div class="section-content">
+                        <select id="apiKeySelect" class="api-key-select">
+                            <option value="">API Key를 선택하세요...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- API 선택 -->
+                <div class="playground-section">
+                    <div class="section-header">
+                        <h3 class="section-title">2. API 선택</h3>
+                    </div>
+                    <div class="section-content">
+                        <select id="apiSelect" class="api-select" disabled>
+                            <option value="">먼저 API Key를 선택하세요...</option>
+                        </select>
+                        <div id="apiInfo" class="api-info hidden">
+                            <div class="api-endpoint">
+                                <span class="method-badge" id="apiMethod"></span>
+                                <code class="api-url" id="apiUrl"></code>
+                            </div>
+                            <p class="api-description" id="apiDescription"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request 입력 -->
+                <div class="playground-section" id="requestSection" style="display: none;">
+                    <div class="section-header">
+                        <h3 class="section-title">3. Request 파라미터</h3>
+                    </div>
+                    <div class="section-content">
+                        <div id="requestFields" class="request-fields">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 호출 버튼 -->
+                <div class="playground-section" id="executeSection" style="display: none;">
+                    <div class="section-content">
+                        <button id="executeBtn" class="execute-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            API 호출하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Response 표시 -->
+                <div class="playground-section" id="responseSection" style="display: none;">
+                    <div class="section-header">
+                        <h3 class="section-title">Response</h3>
+                        <div class="section-actions">
+                            <span class="response-status" id="responseStatus"></span>
+                            <button class="copy-response-btn" id="copyResponseBtn" title="응답 복사">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                복사
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <pre id="responseContent" class="response-content"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:src="@{/js/playground.js}"></script>
+</body>
+</html>

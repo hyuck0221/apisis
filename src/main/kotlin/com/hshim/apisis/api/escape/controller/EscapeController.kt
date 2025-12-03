@@ -42,6 +42,7 @@ class EscapeController(
         pageable: Pageable,
     ): ResponseEntity<Page<EscapeCafeResponse>> {
         val cafePage = escapeCafeQueryService.findAllPageBy(condition, pageable)
+        if (cafePage.content.isEmpty()) return ResponseEntity.ok(Page.empty())
         val themesMap = escapeThemeQueryService.findAllByCafes(cafePage.content)
             .groupBy { it.escapeCafe.id }
 
@@ -59,6 +60,7 @@ class EscapeController(
     @GetMapping("/cafes/by-bounds")
     fun findAllCafesByBounds(condition: EscapeCafeBoundsSearchCondition): ResponseEntity<List<EscapeCafeResponse>> {
         val cafes = escapeCafeQueryService.findAllByBounds(condition)
+        if (cafes.isEmpty()) return ResponseEntity.ok(emptyList())
         val themesMap = escapeThemeQueryService.findAllByCafes(cafes)
             .groupBy { it.escapeCafe.id }
 

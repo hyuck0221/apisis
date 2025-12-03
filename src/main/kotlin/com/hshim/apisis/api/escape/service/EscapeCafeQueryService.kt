@@ -21,10 +21,10 @@ class EscapeCafeQueryService(private val escapeCafeRepository: EscapeCafeReposit
 
     fun findAllPageBy(condition: EscapeCafeSearchCondition, pageable: Pageable): Page<EscapeCafe> {
         return escapeCafeRepository.findAllBySearch(
-            condition.search,
-            condition.onlyOpen,
-            condition.location,
-            condition.area,
+            condition.search ?: "",
+            condition.onlyOpen ?: true,
+            condition.location ?: "",
+            condition.area ?: "",
             pageable,
         )
     }
@@ -35,7 +35,7 @@ class EscapeCafeQueryService(private val escapeCafeRepository: EscapeCafeReposit
             maxLat = condition.maxLat,
             minLng = condition.minLng,
             maxLng = condition.maxLng,
-            onlyOpen = condition.onlyOpen,
+            onlyOpen = condition.onlyOpen ?: false,
         )
     }
 

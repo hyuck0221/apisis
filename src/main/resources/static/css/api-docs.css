@@ -151,6 +151,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 16px;
     margin-bottom: 12px;
     padding-bottom: 12px;
     border-bottom: 1px solid #f0f0f0;
@@ -286,6 +287,38 @@
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
+}
+
+.api-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.try-api-btn {
+    background: linear-gradient(135deg, #40E0D0 0%, #1ABC9C 100%);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(64, 224, 208, 0.3);
+}
+
+.try-api-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(64, 224, 208, 0.4);
+}
+
+.try-api-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .api-link {

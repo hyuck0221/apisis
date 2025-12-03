@@ -60,6 +60,20 @@ class ViewController(private val userRepository: UserRepository) {
         return "api-keys"
     }
 
+    @GetMapping("/playground")
+    fun playground(model: Model): String {
+        val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
+
+        val user = userRepository.findByIdOrNull(userId)
+        if (user == null) {
+            SecurityContextHolder.clearContext()
+            return "redirect:/login"
+        }
+
+        model.addAttribute("user", user)
+        return "playground"
+    }
+
     @GetMapping("/docs")
     fun docs(model: Model): String {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
