@@ -36,7 +36,8 @@ class ApiCallLimitAspect(
         val url = request.requestURI
         val httpMethod = request.method
 
-        val currentCnt = apiCallLogRepository.countByApiKeyValueAndUrlAndMethodAndCalledAtAfter(apiKeyValue, url, httpMethod)
+        val currentCnt =
+            apiCallLogRepository.countByApiKeyValueAndUrlAndMethodAndCalledAtAfter(apiKeyValue, url, httpMethod)
 
         if (information.callLimit in 1..currentCnt) throw ResponseStatusException(
             HttpStatus.TOO_MANY_REQUESTS,
@@ -47,14 +48,18 @@ class ApiCallLimitAspect(
         var isSuccess = true
         var httpStatus = 200
         var errorMessage: String? = null
+        var responseTimeMs = 0L
 
         val result = try {
-            when (val proceedResult = joinPoint.proceed()) {
+            val proceedResult = joinPoint.proceed()
+            responseTimeMs = System.currentTimeMillis() - startTime
+            when (proceedResult) {
                 is ResponseEntity<*> -> {
                     httpStatus = proceedResult.statusCode.value()
                     isSuccess = httpStatus in 200..299
                     proceedResult.body
                 }
+
                 else -> proceedResult
             }
         } catch (e: Exception) {
@@ -63,8 +68,6 @@ class ApiCallLimitAspect(
             errorMessage = e.message
             throw e
         } finally {
-            val responseTimeMs = System.currentTimeMillis() - startTime
-
             Thread {
                 try {
                     apiCallLogRepository.save(
@@ -84,6 +87,6 @@ class ApiCallLimitAspect(
             }.start()
         }
 
-        return ResponseEntity.ok(Envelope(information, currentCnt + 1, result))
+        return ResponseEntity.ok(Envelope(information, currentCnt + 1, result, responseTimeMs))
     }
 }

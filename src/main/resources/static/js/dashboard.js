@@ -8,6 +8,18 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.remove('active');
 }
 
+// API 키 이름 수정 모달
+function showEditNameModal(keyValue, currentName) {
+    document.getElementById('editNameModal').classList.add('active');
+    document.getElementById('editKeyValue').value = keyValue;
+    document.getElementById('editKeyName').value = currentName;
+    document.getElementById('editKeyName').focus();
+}
+
+function closeEditNameModal() {
+    document.getElementById('editNameModal').classList.remove('active');
+}
+
 // API 키 표시/숨김 토글
 function toggleKeyVisibility(keyValue) {
     const keyElement = document.getElementById(`key-${keyValue}`);
@@ -63,6 +75,34 @@ async function createApiKey() {
     }
 }
 
+// API 키 이름 수정
+async function updateKeyName() {
+    const keyValue = document.getElementById('editKeyValue').value;
+    const newName = document.getElementById('editKeyName').value.trim();
+
+    if (!newName) {
+        alert('키 이름을 입력해주세요');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/auth/keys/${keyValue}/name?name=${encodeURIComponent(newName)}`, {
+            method: 'PUT'
+        });
+
+        if (!response.ok) {
+            throw new Error('API 키 이름 수정에 실패했습니다');
+        }
+
+        closeEditNameModal();
+        showToast('✓ API 키 이름이 수정되었습니다');
+        loadApiKeys();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ API 키 이름 수정 중 오류가 발생했습니다');
+    }
+}
+
 // 마스킹된 키 표시 (앞 4자리만 표시)
 function maskApiKey(keyValue) {
     if (keyValue.length <= 4) return keyValue;
@@ -95,7 +135,15 @@ async function loadApiKeys() {
         listContainer.innerHTML = keys.map(key => `
             <div class="api-key-item">
                 <div class="key-row">
-                    <div class="key-name">${escapeHtml(key.name)}</div>
+                    <div class="key-name-group">
+                        <div class="key-name">${escapeHtml(key.name)}</div>
+                        <button class="key-edit-btn" onclick="showEditNameModal('${key.keyValue}', '${escapeHtml(key.name)}')" title="이름 수정">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="key-value-container">
                         <code class="api-key-value masked" id="key-${key.keyValue}">${maskApiKey(key.keyValue)}</code>
                         <button class="key-icon-btn" onclick="toggleKeyVisibility('${key.keyValue}')" title="보기/숨기기">
@@ -219,6 +267,7 @@ function copyKeyValue(keyValue) {
 
 // 모달 외부 클릭시 닫기
 setupModalCloseOnClickOutside('createModal', closeCreateModal);
+setupModalCloseOnClickOutside('editNameModal', closeEditNameModal);
 
 // 대시보드 통계 로드
 async function loadDashboardStats() {

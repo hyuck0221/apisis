@@ -45,8 +45,8 @@
                         <h3 class="section-title">2. API 선택</h3>
                     </div>
                     <div class="section-content">
-                        <select id="apiSelect" class="api-select" disabled>
-                            <option value="">먼저 API Key를 선택하세요...</option>
+                        <select id="apiSelect" class="api-select">
+                            <option value="">API를 선택하세요...</option>
                         </select>
                         <div id="apiInfo" class="api-info hidden">
                             <div class="api-endpoint">
@@ -73,6 +73,14 @@
                 <!-- 호출 버튼 -->
                 <div class="playground-section" id="executeSection" style="display: none;">
                     <div class="section-content">
+                        <div id="apiKeyGuide" class="api-key-guide" style="display: none;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span>API를 호출하려면 먼저 API Key를 선택해주세요</span>
+                        </div>
                         <button id="executeBtn" class="execute-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"></polygon>

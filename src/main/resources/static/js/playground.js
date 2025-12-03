@@ -67,6 +67,7 @@ async function loadAPIs() {
         }
 
         apis = await response.json();
+        populateAPISelect();
 
     } catch (error) {
         console.error('Error:', error);
@@ -74,23 +75,9 @@ async function loadAPIs() {
     }
 }
 
-// API Key 선택 변경
-function handleAPIKeyChange(e) {
-    const apiKey = e.target.value;
+// API 선택 목록 채우기
+function populateAPISelect() {
     const apiSelect = document.getElementById('apiSelect');
-
-    if (!apiKey) {
-        apiSelect.disabled = true;
-        apiSelect.innerHTML = '<option value="">먼저 API Key를 선택하세요...</option>';
-        hideAPIInfo();
-        hideRequestSection();
-        hideExecuteSection();
-        hideResponseSection();
-        return;
-    }
-
-    // API 선택 활성화 및 목록 채우기
-    apiSelect.disabled = false;
     apiSelect.innerHTML = '<option value="">API를 선택하세요...</option>';
 
     // 카테고리별로 그룹화
@@ -116,11 +103,12 @@ function handleAPIKeyChange(e) {
 
         apiSelect.appendChild(optgroup);
     });
+}
 
-    hideAPIInfo();
-    hideRequestSection();
-    hideExecuteSection();
-    hideResponseSection();
+// API Key 선택 변경
+function handleAPIKeyChange(e) {
+    // API Key 변경 시 실행 버튼 상태 업데이트
+    updateExecuteButton();
 }
 
 // API 선택 변경
@@ -143,6 +131,26 @@ function handleAPIChange(e) {
         showRequestSection();
         showExecuteSection();
         hideResponseSection();
+        updateExecuteButton();
+    }
+}
+
+// 실행 버튼 상태 업데이트
+function updateExecuteButton() {
+    const apiKey = document.getElementById('apiKeySelect').value;
+    const executeBtn = document.getElementById('executeBtn');
+    const apiKeyGuide = document.getElementById('apiKeyGuide');
+
+    if (!apiKey) {
+        executeBtn.disabled = true;
+        if (apiKeyGuide) {
+            apiKeyGuide.style.display = 'block';
+        }
+    } else {
+        executeBtn.disabled = false;
+        if (apiKeyGuide) {
+            apiKeyGuide.style.display = 'none';
+        }
     }
 }
 
@@ -154,20 +162,11 @@ function selectAPIFromParams(method, url) {
         return;
     }
 
-    // API Key가 선택되어 있지 않으면 첫 번째 선택
-    const apiKeySelect = document.getElementById('apiKeySelect');
-    if (!apiKeySelect.value && apiKeys.length > 0) {
-        apiKeySelect.value = apiKeys[0].apiKey;
-        apiKeySelect.dispatchEvent(new Event('change'));
-    }
-
-    // API 선택
-    setTimeout(() => {
-        const apiSelect = document.getElementById('apiSelect');
-        const optionValue = JSON.stringify({url: api.url, method: api.method});
-        apiSelect.value = optionValue;
-        apiSelect.dispatchEvent(new Event('change'));
-    }, 100);
+    // API 선택 (API Key는 자동 선택하지 않음)
+    const apiSelect = document.getElementById('apiSelect');
+    const optionValue = JSON.stringify({url: api.url, method: api.method});
+    apiSelect.value = optionValue;
+    apiSelect.dispatchEvent(new Event('change'));
 }
 
 // API 정보 표시

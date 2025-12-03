@@ -10,13 +10,15 @@ data class Envelope<T>(
     val limit: Long?,
     val timestamp: String,
     val payload: T?,
+    val processMs: Long,
 ) {
-    constructor(information: Information, current: Long, payload: T?) : this(
+    constructor(information: Information, current: Long, payload: T?, responseTimeMs: Long) : this(
         title = information.title,
         version = information.version,
         current = current,
         limit = information.callLimit.takeIf { it > 0 },
         timestamp = LocalDateTime.now().toString(),
         payload = payload,
+        processMs = responseTimeMs,
     )
 }

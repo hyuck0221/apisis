@@ -63,10 +63,35 @@ async function loadAPIDocs() {
 
         contentContainer.innerHTML = html;
 
-        // URL 해시가 있으면 해당 API로 스크롤
-        if (window.location.hash) {
+        // 저장된 카테고리 상태 복원
+        const savedExpandedCategories = sessionStorage.getItem('expandedCategories');
+        const savedTargetAPI = sessionStorage.getItem('targetAPI');
+
+        if (savedExpandedCategories) {
+            try {
+                const expandedCategories = JSON.parse(savedExpandedCategories);
+                expandedCategories.forEach(categoryId => {
+                    const list = document.getElementById(`list-${categoryId}`);
+                    const toggle = document.getElementById(`toggle-${categoryId}`);
+                    if (list && toggle) {
+                        list.classList.add('expanded');
+                        toggle.classList.add('expanded');
+                    }
+                });
+            } catch (e) {
+                console.error('Failed to restore category state:', e);
+            }
+            sessionStorage.removeItem('expandedCategories');
+        }
+
+        // URL 해시 또는 저장된 타겟 API로 스크롤
+        const targetAPI = window.location.hash.substring(1) || savedTargetAPI;
+        if (targetAPI) {
             setTimeout(() => {
-                scrollToAPI(window.location.hash.substring(1));
+                scrollToAPI(targetAPI);
+                if (savedTargetAPI) {
+                    sessionStorage.removeItem('targetAPI');
+                }
             }, 100);
         }
 

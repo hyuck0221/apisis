@@ -127,11 +127,46 @@
     flex: 1;
 }
 
+.key-name-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
 .key-title {
     font-size: 18px;
     font-weight: 700;
     color: #1a1a1a;
-    margin-bottom: 6px;
+}
+
+.key-edit-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}
+
+.key-name-group:hover .key-edit-btn,
+.stats-card-header:hover .key-edit-btn {
+    opacity: 1;
+}
+
+.key-edit-btn:hover {
+    color: #40E0D0;
+}
+
+.key-edit-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
 }
 
 .key-value-container {

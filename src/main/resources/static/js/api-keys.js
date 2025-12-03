@@ -8,6 +8,18 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.remove('active');
 }
 
+// API 키 이름 수정 모달
+function showEditNameModal(keyValue, currentName) {
+    document.getElementById('editNameModal').classList.add('active');
+    document.getElementById('editKeyValue').value = keyValue;
+    document.getElementById('editKeyName').value = currentName;
+    document.getElementById('editKeyName').focus();
+}
+
+function closeEditNameModal() {
+    document.getElementById('editNameModal').classList.remove('active');
+}
+
 // API 키 생성
 async function createApiKey() {
     const keyName = document.getElementById('keyName').value.trim();
@@ -38,6 +50,34 @@ async function createApiKey() {
     } catch (error) {
         console.error('Error:', error);
         alert('API 키 생성 중 오류가 발생했습니다');
+    }
+}
+
+// API 키 이름 수정
+async function updateKeyName() {
+    const keyValue = document.getElementById('editKeyValue').value;
+    const newName = document.getElementById('editKeyName').value.trim();
+
+    if (!newName) {
+        alert('키 이름을 입력해주세요');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/auth/keys/${keyValue}/name?name=${encodeURIComponent(newName)}`, {
+            method: 'PUT'
+        });
+
+        if (!response.ok) {
+            throw new Error('API 키 이름 수정에 실패했습니다');
+        }
+
+        closeEditNameModal();
+        showToast('✓ API 키 이름이 수정되었습니다');
+        loadApiKeyStats();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ API 키 이름 수정 중 오류가 발생했습니다');
     }
 }
 
@@ -144,6 +184,7 @@ async function deleteKey(keyValue) {
 
 // 모달 외부 클릭시 닫기
 setupModalCloseOnClickOutside('createModal', closeCreateModal);
+setupModalCloseOnClickOutside('editNameModal', closeEditNameModal);
 
 // API 키 통계 목록 로드
 async function loadApiKeyStats() {
@@ -193,7 +234,15 @@ async function loadApiKeyStats() {
                 <div class="api-key-stats-card">
                     <div class="stats-card-header">
                         <div class="key-info-header">
-                            <h3 class="key-title">${escapeHtml(stat.name)}</h3>
+                            <div class="key-name-group">
+                                <h3 class="key-title">${escapeHtml(stat.name)}</h3>
+                                <button class="key-edit-btn" onclick="showEditNameModal('${stat.apiKeyValue}', '${escapeHtml(stat.name)}')" title="이름 수정">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                             <div class="key-value-container">
                                 <code class="key-value-display masked" id="key-${stat.apiKeyValue}">${maskApiKey(stat.apiKeyValue)}</code>
                                 <button class="key-icon-btn" onclick="toggleKeyVisibility('${stat.apiKeyValue}')" title="보기/숨기기">

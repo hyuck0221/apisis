@@ -273,6 +273,27 @@
     font-style: italic;
 }
 
+/* API Key 가이드 */
+.api-key-guide {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    color: #856404;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.api-key-guide svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #ffc107;
+}
+
 /* 실행 버튼 */
 .execute-btn {
     width: 100%;
@@ -306,6 +327,7 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    opacity: 0.6;
 }
 
 .execute-btn svg {

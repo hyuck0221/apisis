@@ -215,6 +215,14 @@ function getAPIId(api) {
 
 // API로 네비게이션
 function navigateToAPI(apiId) {
+    // 펼쳐진 카테고리 상태 저장
+    const expandedCategories = Array.from(document.querySelectorAll('.nav-submenu-category-title.expanded'))
+        .map(el => el.parentElement.querySelector('.nav-submenu-apis').id.replace('subcategory-', ''));
+    sessionStorage.setItem('expandedCategories', JSON.stringify(expandedCategories));
+
+    // 타겟 API 저장
+    sessionStorage.setItem('targetAPI', apiId);
+
     if (window.location.pathname !== '/docs') {
         window.location.href = `/docs#${apiId}`;
     } else {

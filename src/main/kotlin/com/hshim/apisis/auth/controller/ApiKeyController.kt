@@ -25,18 +25,18 @@ class ApiKeyController(
         return apiKeyQueryService.findAllByUserId(userId)
     }
 
+    @PutMapping("/{keyValue}/name")
+    fun updateName(
+        @PathVariable keyValue: String,
+        @RequestParam name: String,
+    ) = apiKeyCommandService.updateName(keyValue, name)
+
     @PutMapping("/{keyValue}/activate")
-    fun activateApiKey(@PathVariable keyValue: String) {
-        apiKeyCommandService.activate(keyValue)
-    }
+    fun activateApiKey(@PathVariable keyValue: String) = apiKeyCommandService.activate(keyValue)
 
     @PutMapping("/{keyValue}/deactivate")
-    fun deactivateApiKey(@PathVariable keyValue: String) {
-        apiKeyCommandService.deactivate(keyValue)
-    }
+    fun deactivateApiKey(@PathVariable keyValue: String) = apiKeyCommandService.deactivate(keyValue)
 
     @DeleteMapping("/{keyValue}")
-    fun deleteApiKey(@PathVariable keyValue: String) {
-        apiKeyCommandService.delete(keyValue)
-    }
+    fun deleteApiKey(@PathVariable keyValue: String) = apiKeyCommandService.delete(keyValue)
 }

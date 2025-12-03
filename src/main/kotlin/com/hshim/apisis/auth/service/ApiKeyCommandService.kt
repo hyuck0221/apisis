@@ -33,6 +33,11 @@ class ApiKeyCommandService(
         return ApiKeyResponse(apiKey)
     }
 
+    fun updateName(keyValue: String, name: String) {
+        apiKeyRepository.findByKeyValue(keyValue)
+            ?.apply { this.name = name }
+    }
+
     @CacheEvict(value = ["apiKeys"], key = "#keyValue")
     fun activate(keyValue: String) {
         val apiKey = apiKeyRepository.findByKeyValue(keyValue) ?: return

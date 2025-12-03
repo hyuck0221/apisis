@@ -15,7 +15,7 @@ class ApiKey(
     val keyValue: String,
 
     @Column(nullable = false)
-    val name: String,
+    var name: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
