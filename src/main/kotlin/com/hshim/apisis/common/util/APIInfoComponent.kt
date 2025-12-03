@@ -54,9 +54,9 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
                     requestSchema.putAll(buildSchema(param.type))
                 }
 
-                val resClass = extractActualResponseClass(handlerMethod.method.genericReturnType)
-                val responseSchema = buildSchema(resClass)
-                val responseInfos = extractFieldInfos(resClass, null)
+                val resType = extractActualResponseClass(handlerMethod.method.genericReturnType)
+                val responseSchema = buildSchemaFromType(resType)
+                val responseInfos = extractFieldInfosFromType(resType, null)
 
                 result.add(
                     APIInfoResponse(
@@ -86,7 +86,7 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
         }
     }
 
-    private fun extractActualResponseClass(returnType: Type): Class<*> {
+    private fun extractActualResponseClass(returnType: Type): Type {
         return when (returnType) {
             is ParameterizedType -> {
                 val rawType = returnType.rawType as Class<*>
@@ -96,12 +96,8 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
                     return extractActualResponseClass(innerType ?: Any::class.java)
                 }
 
-                if (rawType == Page::class.java || rawType == List::class.java) {
-                    val actualType = returnType.actualTypeArguments.firstOrNull()
-                    return (actualType as? Class<*>) ?: Any::class.java
-                }
-
-                rawType
+                // Page나 List는 전체 타입을 반환 (래퍼 정보 포함)
+                returnType
             }
             is Class<*> -> returnType
             else -> Any::class.java
@@ -194,6 +190,47 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
         }
     }
 
+    private fun buildSchemaFromType(type: Type): Any {
+        return when (type) {
+            is ParameterizedType -> {
+                val rawType = type.rawType as Class<*>
+                if (rawType == Page::class.java || rawType == List::class.java) {
+                    val innerType = type.actualTypeArguments.firstOrNull()
+                    val innerSchema = if (innerType is Class<*>) {
+                        buildSchema(innerType)
+                    } else if (innerType is ParameterizedType) {
+                        buildSchemaFromType(innerType)
+                    } else {
+                        mapOf("item" to "Any")
+                    }
+
+                    // Page는 래퍼 정보 포함, List는 배열로 직접 표현
+                    if (rawType == Page::class.java) {
+                        mapOf(
+                            "content" to listOf(innerSchema),
+                            "pageable" to "Pageable",
+                            "totalPages" to "int",
+                            "totalElements" to "long",
+                            "last" to "boolean",
+                            "size" to "int",
+                            "number" to "int",
+                            "numberOfElements" to "int",
+                            "first" to "boolean",
+                            "empty" to "boolean"
+                        )
+                    } else {
+                        // List<Object>는 배열로 직접 반환
+                        listOf(innerSchema)
+                    }
+                } else {
+                    buildSchema(rawType)
+                }
+            }
+            is Class<*> -> buildSchema(type)
+            else -> emptyMap<String, Any>()
+        }
+    }
+
     private fun buildSchema(clazz: Class<*>): Map<String, Any> {
         return try {
             clazz.kotlin.memberProperties.associate { prop ->
@@ -210,10 +247,22 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
                             }
                         }
                         is ParameterizedType -> {
-                            val raw = javaType.rawType.typeName
-                            val innerType = javaType.actualTypeArguments.firstOrNull()
-                            val args = if (innerType != null) parseType(innerType) else "Any"
-                            "${raw.split(".").last()}<$args>"
+                            val raw = javaType.rawType as Class<*>
+                            if (raw == List::class.java) {
+                                val innerType = javaType.actualTypeArguments.firstOrNull()
+                                if (innerType is Class<*> && !isSimpleType(innerType)) {
+                                    // List<Object>의 경우 객체 스키마를 배열로 표현
+                                    listOf(buildSchema(innerType))
+                                } else {
+                                    val args = if (innerType != null) getSimpleTypeName(innerType) else "Any"
+                                    "List<$args>"
+                                }
+                            } else {
+                                val rawName = raw.simpleName
+                                val innerType = javaType.actualTypeArguments.firstOrNull()
+                                val args = if (innerType != null) getSimpleTypeName(innerType) else "Any"
+                                "$rawName<$args>"
+                            }
                         }
                         else -> javaType.typeName
                     }
@@ -223,6 +272,45 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
             }
         } catch (e: Exception) {
             emptyMap()
+        }
+    }
+
+    private fun extractFieldInfosFromType(
+        type: Type,
+        paramType: ParameterType?,
+        prefix: String = ""
+    ): List<FieldInfo> {
+        return when (type) {
+            is ParameterizedType -> {
+                val rawType = type.rawType as Class<*>
+                if (rawType == Page::class.java || rawType == List::class.java) {
+                    val innerType = type.actualTypeArguments.firstOrNull()
+                    val clazz = when (innerType) {
+                        is Class<*> -> innerType
+                        is ParameterizedType -> innerType.rawType as Class<*>
+                        else -> Any::class.java
+                    }
+
+                    val fields = mutableListOf<FieldInfo>()
+
+                    // Page 래퍼 필드 추가
+                    if (rawType == Page::class.java) {
+                        fields.add(FieldInfo("content", rawType.simpleName, "페이지 컨텐츠", false, paramType))
+                        fields.add(FieldInfo("totalPages", "int", "전체 페이지 수", false, paramType))
+                        fields.add(FieldInfo("totalElements", "long", "전체 요소 수", false, paramType))
+                        fields.add(FieldInfo("size", "int", "페이지 크기", false, paramType))
+                        fields.add(FieldInfo("number", "int", "현재 페이지 번호", false, paramType))
+                    }
+
+                    // 내부 객체 필드 추가
+                    fields.addAll(extractFieldInfos(clazz, paramType, if (rawType == Page::class.java) "content" else "items"))
+                    fields
+                } else {
+                    extractFieldInfos(rawType, paramType, prefix)
+                }
+            }
+            is Class<*> -> extractFieldInfos(type, paramType, prefix)
+            else -> emptyList()
         }
     }
 }

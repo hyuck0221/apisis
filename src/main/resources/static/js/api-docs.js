@@ -214,7 +214,20 @@ function renderFieldInfoTable(fieldInfos) {
 
 // JSON 스키마를 코드 하이라이트와 함께 렌더링
 function renderJSONSchema(schema, indent = 0) {
-    if (!schema || Object.keys(schema).length === 0) {
+    // 배열인 경우 (최상위 List<Object>)
+    if (Array.isArray(schema)) {
+        const indentStr = '  '.repeat(indent);
+        const lines = [];
+        lines.push('[');
+        if (schema.length > 0 && typeof schema[0] === 'object') {
+            lines.push(`${indentStr}  ${renderJSONSchema(schema[0], indent + 1)}`);
+        }
+        lines.push(`${indentStr}]`);
+        return lines.join('\n');
+    }
+
+    // 객체인 경우
+    if (!schema || (typeof schema === 'object' && Object.keys(schema).length === 0)) {
         return '<span class="schema-empty">No schema available</span>';
     }
 
@@ -228,7 +241,16 @@ function renderJSONSchema(schema, indent = 0) {
         const isLast = index === entries.length - 1;
         const comma = isLast ? '' : ',';
 
-        if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+        if (Array.isArray(value)) {
+            // 배열인 경우 (List<Object> 타입)
+            if (value.length > 0 && typeof value[0] === 'object') {
+                lines.push(`${indentStr}  <span class="json-key">"${escapeHtml(key)}"</span>: [`);
+                lines.push(`${indentStr}    ${renderJSONSchema(value[0], indent + 2)}`);
+                lines.push(`${indentStr}  ]${comma}`);
+            } else {
+                lines.push(`${indentStr}  <span class="json-key">"${escapeHtml(key)}"</span>: []${comma}`);
+            }
+        } else if (typeof value === 'object' && value !== null) {
             lines.push(`${indentStr}  <span class="json-key">"${escapeHtml(key)}"</span>: ${renderJSONSchema(value, indent + 1)}${comma}`);
         } else {
             const valueStr = formatJSONValue(value);

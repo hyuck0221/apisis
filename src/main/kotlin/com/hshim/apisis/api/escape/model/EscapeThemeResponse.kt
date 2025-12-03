@@ -2,7 +2,6 @@ package com.hshim.apisis.api.escape.model
 
 import com.hshim.apisis.api.escape.entity.EscapeTheme
 import com.hshim.apisis.common.annotation.FieldDescription
-import util.DateUtil.dateToString
 
 class EscapeThemeResponse(
     @FieldDescription("테마 참조 ID")
@@ -52,12 +51,6 @@ class EscapeThemeResponse(
 
     @FieldDescription("연기력 (0-5)")
     val act: Double,
-
-    @FieldDescription("생성일")
-    val createDate: String,
-
-    @FieldDescription("수정일")
-    val updateDate: String,
 ) {
     constructor(escapeTheme: EscapeTheme) : this(
         refId = escapeTheme.refId,
@@ -76,7 +69,5 @@ class EscapeThemeResponse(
         story = escapeTheme.story,
         interior = escapeTheme.interior,
         act = escapeTheme.act,
-        createDate = escapeTheme.createDate.dateToString(),
-        updateDate = escapeTheme.updateDate.dateToString()
     )
 }

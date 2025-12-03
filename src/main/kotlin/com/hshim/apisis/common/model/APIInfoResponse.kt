@@ -11,7 +11,7 @@ data class APIInfoResponse (
     val version: String,
     val callLimit: Long,
     val requestSchema: Map<String, Any>,
-    val responseSchema: Map<String, Any>,
+    val responseSchema: Any,
     val requestInfos: List<FieldInfo>,
     val responseInfos: List<FieldInfo>
 ) {
@@ -20,7 +20,7 @@ data class APIInfoResponse (
         method: String,
         information: Information,
         requestSchema: Map<String, Any>,
-        responseSchema: Map<String, Any>,
+        responseSchema: Any,
         requestInfos: List<FieldInfo>,
         responseInfos: List<FieldInfo>
     ): this (

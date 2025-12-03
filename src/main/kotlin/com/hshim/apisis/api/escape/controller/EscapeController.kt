@@ -22,6 +22,7 @@ class EscapeController(
         title = "카페 지역 검색",
         description = "전국의 방탈출 카페가 있는 지역을 검색합니다",
         version = "1.0",
+        callLimit = 100000,
     )
     @GetMapping("/cafes/location")
     fun findAllCafesLocation(): ResponseEntity<List<EscapeCafeLocationResponse>> {
@@ -33,6 +34,7 @@ class EscapeController(
         title = "카페 검색",
         description = "전국의 방탈출 카페를 검색합니다",
         version = "1.0",
+        callLimit = 50000,
     )
     @GetMapping("/cafes")
     fun findAllCafes(
@@ -52,6 +54,7 @@ class EscapeController(
         title = "카페 위도/경도 검색",
         description = "전국의 방탈출 카페를 위도/경도로 검색합니다",
         version = "1.0",
+        callLimit = 50000,
     )
     @GetMapping("/cafes/by-bounds")
     fun findAllCafesByBounds(condition: EscapeCafeBoundsSearchCondition): ResponseEntity<List<EscapeCafeResponse>> {
@@ -68,6 +71,7 @@ class EscapeController(
         title = "테마 검색",
         description = "전국의 방탈출 카페 테마를 검색합니다",
         version = "1.0",
+        callLimit = 20000,
     )
     @GetMapping("/themes")
     fun findAllThemes(

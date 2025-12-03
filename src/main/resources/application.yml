@@ -65,5 +65,5 @@ kemi:
 escape:
   theme:
     crawling-url: https://q.keigon.net/indexes/qrooms/search
-    crawling-authorization: Bearer F3WdGD8S3783e99ba7d4508fa06c0dc6d1822e2bd73b87bfe2dd204eae14eb34220cda75
+    crawling-authorization: Bearer ${ESCAPE_CRAWLING_TOKEN:F3WdGD8S3783e99ba7d4508fa06c0dc6d1822e2bd73b87bfe2dd204eae14eb34220cda75}
     photo-base-url: https://cdn.keigon.net
