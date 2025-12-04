@@ -67,4 +67,6 @@ interface EscapeThemeRepository : JpaRepository<EscapeTheme, Long> {
     ): Page<EscapeTheme>
 
     fun findTopByOrderByRefIdDesc(): EscapeTheme?
+
+    fun findTopBy(): EscapeTheme?
 }

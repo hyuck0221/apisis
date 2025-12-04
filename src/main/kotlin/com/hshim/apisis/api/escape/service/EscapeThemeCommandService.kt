@@ -25,7 +25,7 @@ class EscapeThemeCommandService(
         }
     }
 
-    fun crawling() {
+    fun migration() {
         val sliceCnt = 500
 
         val topHit = escapeThemeQueryService.findTopHitByOpenAPI()
