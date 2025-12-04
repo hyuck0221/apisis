@@ -1,9 +1,8 @@
-package com.hshim.apisis.auth.controller
+package com.hshim.apisis.web.controller
 
-import com.hshim.apisis.auth.model.ApiKeyStatsResponse
-import com.hshim.apisis.auth.model.UsageResponse
-import com.hshim.apisis.auth.service.ApiKeyStatsService
-import com.hshim.apisis.common.annotation.Information
+import com.hshim.apisis.web.model.ApiKeyStatsResponse
+import com.hshim.apisis.web.model.UsageResponse
+import com.hshim.apisis.web.service.ApiKeyStatsService
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/auth/keys/stats")
+@RequestMapping("/web/keys/stats")
 class ApiKeyStatsController(
     private val apiKeyStatsService: ApiKeyStatsService
 ) {

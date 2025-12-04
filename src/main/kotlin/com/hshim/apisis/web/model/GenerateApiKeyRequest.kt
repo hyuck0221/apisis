@@ -1,6 +1,6 @@
-package com.hshim.apisis.auth.model
+package com.hshim.apisis.web.model
 
-import com.hshim.apisis.auth.entity.ApiKey
+import com.hshim.apisis.web.entity.ApiKey
 import com.hshim.apisis.user.entity.User
 
 data class GenerateApiKeyRequest(

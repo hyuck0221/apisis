@@ -1,7 +1,7 @@
 // API 문서 로드
 async function loadAPIDocs() {
     try {
-        const response = await fetch('/auth/docs/list');
+        const response = await fetch('/web/docs/list');
 
         if (!response.ok) {
             throw new Error('API 문서를 불러오는데 실패했습니다');

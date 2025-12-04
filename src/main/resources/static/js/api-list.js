@@ -5,7 +5,7 @@ let filteredAPIs = [];
 // API 목록 로드
 async function loadAPIList() {
     try {
-        const response = await fetch('/auth/docs/list');
+        const response = await fetch('/web/docs/list');
 
         if (!response.ok) {
             throw new Error('API 목록을 불러오는데 실패했습니다');

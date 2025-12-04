@@ -1,8 +1,8 @@
-package com.hshim.apisis.auth.service
+package com.hshim.apisis.web.service
 
-import com.hshim.apisis.auth.entity.ApiKey
-import com.hshim.apisis.auth.model.ApiKeyResponse
-import com.hshim.apisis.auth.repository.ApiKeyRepository
+import com.hshim.apisis.web.entity.ApiKey
+import com.hshim.apisis.web.model.ApiKeyResponse
+import com.hshim.apisis.web.repository.ApiKeyRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

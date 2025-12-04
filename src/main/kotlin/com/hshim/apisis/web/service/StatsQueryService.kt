@@ -1,13 +1,13 @@
-package com.hshim.apisis.auth.service
+package com.hshim.apisis.web.service
 
-import com.hshim.apisis.auth.model.DashboardStatsResponse
-import com.hshim.apisis.auth.repository.ApiCallLogRepository
-import com.hshim.apisis.auth.repository.ApiKeyRepository
+import com.hshim.apisis.web.model.DashboardStatsResponse
+import com.hshim.apisis.web.repository.ApiCallLogRepository
+import com.hshim.apisis.web.repository.ApiKeyRepository
 import org.springframework.stereotype.Service
 import kotlin.math.roundToLong
 
 @Service
-class StatsService(
+class StatsQueryService(
     private val apiKeyRepository: ApiKeyRepository,
     private val apiCallLogRepository: ApiCallLogRepository
 ) {

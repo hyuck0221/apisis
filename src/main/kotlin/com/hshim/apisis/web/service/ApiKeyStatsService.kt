@@ -1,14 +1,15 @@
-package com.hshim.apisis.auth.service
+package com.hshim.apisis.web.service
 
-import com.hshim.apisis.auth.model.ApiKeyStatsResponse
-import com.hshim.apisis.auth.model.ApiStatistics
-import com.hshim.apisis.auth.model.HourlyTraffic
-import com.hshim.apisis.auth.model.UsageResponse
-import com.hshim.apisis.auth.model.UsageStatistics
-import com.hshim.apisis.auth.repository.ApiCallLogRepository
-import com.hshim.apisis.auth.repository.ApiKeyRepository
+import com.hshim.apisis.web.model.ApiKeyStatsResponse
+import com.hshim.apisis.web.model.ApiStatistics
+import com.hshim.apisis.web.model.HourlyTraffic
+import com.hshim.apisis.web.model.UsageResponse
+import com.hshim.apisis.web.model.UsageStatistics
+import com.hshim.apisis.web.repository.ApiCallLogRepository
+import com.hshim.apisis.web.repository.ApiKeyRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -136,8 +137,8 @@ class ApiKeyStatsService(
             "month" -> Pair(now.minusDays(30), now)
             "custom" -> {
                 if (startDate != null && endDate != null) {
-                    val start = java.time.LocalDate.parse(startDate).atStartOfDay()
-                    val end = java.time.LocalDate.parse(endDate).atTime(23, 59, 59)
+                    val start = LocalDate.parse(startDate).atStartOfDay()
+                    val end = LocalDate.parse(endDate).atTime(23, 59, 59)
                     Pair(start, end)
                 } else {
                     Pair(now.toLocalDate().atStartOfDay(), now)

@@ -1,4 +1,4 @@
-package com.hshim.apisis.auth.entity
+package com.hshim.apisis.web.entity
 
 import jakarta.persistence.*
 import util.CommonUtil.ulid

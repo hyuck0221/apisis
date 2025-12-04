@@ -34,7 +34,7 @@ function setupEventListeners() {
 // API Keys 로드
 async function loadAPIKeys() {
     try {
-        const response = await fetch('/auth/keys');
+        const response = await fetch('/web/keys');
 
         if (!response.ok) {
             throw new Error('API Keys를 불러오는데 실패했습니다');
@@ -60,7 +60,7 @@ async function loadAPIKeys() {
 // APIs 로드
 async function loadAPIs() {
     try {
-        const response = await fetch('/auth/docs/list');
+        const response = await fetch('/web/docs/list');
 
         if (!response.ok) {
             throw new Error('API 목록을 불러오는데 실패했습니다');

@@ -30,7 +30,7 @@ async function createApiKey() {
     }
 
     try {
-        const response = await fetch('/auth/keys', {
+        const response = await fetch('/web/keys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ async function updateKeyName() {
     }
 
     try {
-        const response = await fetch(`/auth/keys/${keyValue}/name?name=${encodeURIComponent(newName)}`, {
+        const response = await fetch(`/web/keys/${keyValue}/name?name=${encodeURIComponent(newName)}`, {
             method: 'PUT'
         });
 
@@ -120,7 +120,7 @@ async function activateKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/auth/keys/${keyValue}/activate`, {
+        const response = await fetch(`/web/keys/${keyValue}/activate`, {
             method: 'PUT'
         });
 
@@ -143,7 +143,7 @@ async function deactivateKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/auth/keys/${keyValue}/deactivate`, {
+        const response = await fetch(`/web/keys/${keyValue}/deactivate`, {
             method: 'PUT'
         });
 
@@ -166,7 +166,7 @@ async function deleteKey(keyValue) {
     }
 
     try {
-        const response = await fetch(`/auth/keys/${keyValue}`, {
+        const response = await fetch(`/web/keys/${keyValue}`, {
             method: 'DELETE'
         });
 
@@ -189,7 +189,7 @@ setupModalCloseOnClickOutside('editNameModal', closeEditNameModal);
 // API 키 통계 목록 로드
 async function loadApiKeyStats() {
     try {
-        const response = await fetch('/auth/keys/stats');
+        const response = await fetch('/web/keys/stats');
 
         if (!response.ok) {
             throw new Error('API 키 통계를 불러오는데 실패했습니다');

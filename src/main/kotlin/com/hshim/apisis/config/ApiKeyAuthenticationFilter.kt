@@ -1,6 +1,6 @@
 package com.hshim.apisis.config
 
-import com.hshim.apisis.auth.service.ApiKeyQueryService
+import com.hshim.apisis.web.service.ApiKeyQueryService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

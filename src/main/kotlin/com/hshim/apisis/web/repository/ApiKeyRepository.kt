@@ -1,6 +1,6 @@
-package com.hshim.apisis.auth.repository
+package com.hshim.apisis.web.repository
 
-import com.hshim.apisis.auth.entity.ApiKey
+import com.hshim.apisis.web.entity.ApiKey
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

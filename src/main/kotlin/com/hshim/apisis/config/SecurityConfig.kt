@@ -34,7 +34,7 @@ class SecurityConfig(
                     .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
 
                     // JWT 기반 인증이 필요한 경로 (대시보드 및 관리)
-                    .requestMatchers("/dashboard/**", "/auth/**").authenticated()
+                    .requestMatchers("/dashboard/**", "/web/**").authenticated()
 
                     // API 키 헤더 기반 인증이 필요한 경로 (실제 API들)
                     .requestMatchers("/api/**").authenticated()

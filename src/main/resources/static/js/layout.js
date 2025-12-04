@@ -76,6 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // API 문서 서브메뉴 로드 (모든 페이지에서 로드)
     loadAPICategories();
+
+    // 저장된 네비게이션 상태가 있으면 먼저 복원
+    restoreNavigationState();
 });
 
 // 현재 페이지 네비게이션 하이라이트
@@ -123,10 +126,17 @@ function toggleSubmenu(event) {
 
     const navItem = event.currentTarget;
     const submenu = navItem.nextElementSibling;
+    const page = navItem.getAttribute('data-page');
 
     navItem.classList.toggle('expanded');
     if (submenu) {
         submenu.classList.toggle('expanded');
+    }
+
+    // localStorage에 상태 저장
+    if (page) {
+        const isExpanded = navItem.classList.contains('expanded');
+        localStorage.setItem(`nav-${page}-expanded`, isExpanded);
     }
 
     // 서브메뉴가 비어있으면 API 목록 로드 시도
@@ -138,7 +148,7 @@ function toggleSubmenu(event) {
 // API 카테고리 목록 로드 및 서브메뉴 생성
 async function loadAPICategories() {
     try {
-        const response = await fetch('/auth/docs/list');
+        const response = await fetch('/web/docs/list');
         if (!response.ok) return;
 
         const apis = await response.json();
@@ -182,16 +192,47 @@ async function loadAPICategories() {
                 `;
             }).join('');
 
-            // 문서 페이지에서는 자동으로 서브메뉴 펼치기
-            const docsNavItem = document.querySelector('.nav-item.has-submenu[data-page="docs"]');
-            if (docsNavItem) {
-                docsNavItem.classList.add('expanded');
-                submenuContainer.classList.add('expanded');
-            }
+            // 저장된 상태 복원
+            restoreNavigationState();
         }
     } catch (error) {
         console.error('Failed to load API categories:', error);
     }
+}
+
+// 네비게이션 상태 복원
+function restoreNavigationState() {
+    // 메인 서브메뉴 상태 복원
+    const navItems = document.querySelectorAll('.nav-item.has-submenu');
+    navItems.forEach(navItem => {
+        const page = navItem.getAttribute('data-page');
+        if (page) {
+            const isExpanded = localStorage.getItem(`nav-${page}-expanded`) === 'true';
+            const submenu = navItem.nextElementSibling;
+
+            if (isExpanded) {
+                navItem.classList.add('expanded');
+                if (submenu) {
+                    submenu.classList.add('expanded');
+                }
+            }
+        }
+    });
+
+    // 서브카테고리 상태 복원
+    const subCategories = document.querySelectorAll('.nav-submenu-category-title');
+    subCategories.forEach(categoryTitle => {
+        const apisContainer = categoryTitle.nextElementSibling;
+        if (apisContainer && apisContainer.id) {
+            const categoryId = apisContainer.id.replace('subcategory-', '');
+            const isExpanded = localStorage.getItem(`subcategory-${categoryId}-expanded`) === 'true';
+
+            if (isExpanded) {
+                categoryTitle.classList.add('expanded');
+                apisContainer.classList.add('expanded');
+            }
+        }
+    });
 }
 
 // 서브카테고리 토글
@@ -206,6 +247,10 @@ function toggleSubCategory(event, categoryId) {
     if (apisContainer) {
         apisContainer.classList.toggle('expanded');
     }
+
+    // localStorage에 상태 저장
+    const isExpanded = categoryTitle.classList.contains('expanded');
+    localStorage.setItem(`subcategory-${categoryId}-expanded`, isExpanded);
 }
 
 // API ID 생성 (layout.js에서도 필요)

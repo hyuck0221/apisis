@@ -1,14 +1,14 @@
-package com.hshim.apisis.auth.controller
+package com.hshim.apisis.web.controller
 
-import com.hshim.apisis.auth.model.ApiKeyResponse
-import com.hshim.apisis.auth.model.GenerateApiKeyRequest
-import com.hshim.apisis.auth.service.ApiKeyCommandService
-import com.hshim.apisis.auth.service.ApiKeyQueryService
+import com.hshim.apisis.web.model.ApiKeyResponse
+import com.hshim.apisis.web.model.GenerateApiKeyRequest
+import com.hshim.apisis.web.service.ApiKeyCommandService
+import com.hshim.apisis.web.service.ApiKeyQueryService
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserId
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/auth/keys")
+@RequestMapping("/web/keys")
 class ApiKeyController(
     private val apiKeyQueryService: ApiKeyQueryService,
     private val apiKeyCommandService: ApiKeyCommandService,

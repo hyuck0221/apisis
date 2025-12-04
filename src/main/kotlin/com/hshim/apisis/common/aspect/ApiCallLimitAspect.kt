@@ -1,7 +1,7 @@
 package com.hshim.apisis.common.aspect
 
-import com.hshim.apisis.auth.entity.ApiCallLog
-import com.hshim.apisis.auth.repository.ApiCallLogRepository
+import com.hshim.apisis.web.entity.ApiCallLog
+import com.hshim.apisis.web.repository.ApiCallLogRepository
 import com.hshim.apisis.common.annotation.Information
 import com.hshim.apisis.common.model.Envelope
 import jakarta.servlet.http.HttpServletRequest

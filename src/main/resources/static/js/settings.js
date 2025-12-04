@@ -13,7 +13,7 @@ function closeDeleteAccountModal() {
 // 계정 탈퇴
 async function deleteAccount() {
     try {
-        const response = await fetch('/auth/user', {
+        const response = await fetch('/web/user', {
             method: 'DELETE',
         });
 

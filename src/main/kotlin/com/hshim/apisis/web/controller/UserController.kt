@@ -1,4 +1,4 @@
-package com.hshim.apisis.auth.controller
+package com.hshim.apisis.web.controller
 
 import com.hshim.apisis.user.service.UserCommandService
 import com.hshim.apisis.user.service.UserUtil
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/auth/user")
+@RequestMapping("/web/user")
 class UserController(
     private val userCommandService: UserCommandService,
 ) {

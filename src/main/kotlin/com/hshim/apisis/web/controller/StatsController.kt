@@ -1,19 +1,19 @@
-package com.hshim.apisis.auth.controller
+package com.hshim.apisis.web.controller
 
-import com.hshim.apisis.auth.model.DashboardStatsResponse
-import com.hshim.apisis.auth.service.StatsService
+import com.hshim.apisis.web.model.DashboardStatsResponse
+import com.hshim.apisis.web.service.StatsQueryService
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserId
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/auth/stats")
-class StatsController(private val statsService: StatsService) {
+@RequestMapping("/web/stats")
+class StatsController(private val statsQueryService: StatsQueryService) {
 
     @GetMapping
     fun getDashboardStats(): DashboardStatsResponse {
         val userId = getCurrentUserId()
-        return statsService.getDashboardStats(userId)
+        return statsQueryService.getDashboardStats(userId)
     }
 }

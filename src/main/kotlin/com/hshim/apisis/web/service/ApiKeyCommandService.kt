@@ -1,9 +1,9 @@
-package com.hshim.apisis.auth.service
+package com.hshim.apisis.web.service
 
-import com.hshim.apisis.auth.model.ApiKeyResponse
-import com.hshim.apisis.auth.model.GenerateApiKeyRequest
-import com.hshim.apisis.auth.repository.ApiCallLogRepository
-import com.hshim.apisis.auth.repository.ApiKeyRepository
+import com.hshim.apisis.web.model.ApiKeyResponse
+import com.hshim.apisis.web.model.GenerateApiKeyRequest
+import com.hshim.apisis.web.repository.ApiCallLogRepository
+import com.hshim.apisis.web.repository.ApiKeyRepository
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

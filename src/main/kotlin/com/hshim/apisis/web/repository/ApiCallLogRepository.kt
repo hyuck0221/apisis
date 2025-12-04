@@ -1,6 +1,6 @@
-package com.hshim.apisis.auth.repository
+package com.hshim.apisis.web.repository
 
-import com.hshim.apisis.auth.entity.ApiCallLog
+import com.hshim.apisis.web.entity.ApiCallLog
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

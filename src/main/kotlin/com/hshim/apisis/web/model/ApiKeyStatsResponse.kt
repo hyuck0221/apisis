@@ -1,4 +1,4 @@
-package com.hshim.apisis.auth.model
+package com.hshim.apisis.web.model
 
 data class ApiKeyStatsResponse(
     val apiKeyValue: String,
