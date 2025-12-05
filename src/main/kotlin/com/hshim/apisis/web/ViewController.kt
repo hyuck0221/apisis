@@ -2,6 +2,7 @@ package com.hshim.apisis.web
 
 import com.hshim.apisis.user.repository.UserRepository
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserIdOrNull
+import com.hshim.apisis.web.service.AnalyticsSettingQueryService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
@@ -9,7 +10,10 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class ViewController(private val userRepository: UserRepository) {
+class ViewController(
+    private val userRepository: UserRepository,
+    private val analyticsSettingQueryService: AnalyticsSettingQueryService,
+) {
 
     @GetMapping("/")
     fun index(): String {
@@ -127,6 +131,7 @@ class ViewController(private val userRepository: UserRepository) {
         }
 
         model.addAttribute("user", user)
+        model.addAttribute("analyticsSetting", analyticsSettingQueryService.findBy(userId))
         return "analytics"
     }
 
@@ -141,6 +146,7 @@ class ViewController(private val userRepository: UserRepository) {
         }
 
         model.addAttribute("user", user)
+        model.addAttribute("analyticsSetting", analyticsSettingQueryService.findBy(userId))
         return "settings"
     }
 }

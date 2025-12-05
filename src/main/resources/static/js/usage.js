@@ -194,7 +194,7 @@ function initializeCharts() {
 // 사용량 데이터 로드
 async function loadUsageData() {
     try {
-        let url = `/auth/keys/stats/usage?period=${currentPeriod}`;
+        let url = `/web/keys/stats/usage?period=${currentPeriod}`;
 
         // 사용자 지정 기간인 경우 날짜 파라미터 추가
         if (currentPeriod === 'custom' && customStartDate && customEndDate) {
