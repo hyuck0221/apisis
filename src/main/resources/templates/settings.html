@@ -70,7 +70,7 @@
             <div class="settings-card">
                 <div class="settings-header">
                     <h2 class="settings-title">분석 설정</h2>
-                    <p class="settings-subtitle">API 사용 분석 및 알림 설정</p>
+                    <p class="settings-subtitle">API 사용 분석 설정</p>
                 </div>
 
                 <div class="settings-content">
@@ -104,15 +104,15 @@
                             <div class="setting-value" id="nextAnalyticsDate"
                                  th:text="${analyticsSetting != null ? #temporals.format(analyticsSetting.nextAnalyticsDate, 'yyyy년 MM월 dd일') : '-'}">-</div>
                         </div>
-                    </div>
-
-                    <div class="setting-actions">
-                        <button class="btn-primary" onclick="saveAnalyticsSettings()">저장</button>
+                        <button class="btn-request" id="requestAnalyticsBtn" onclick="requestAnalytics()"
+                                th:disabled="${analyticsSetting != null && #temporals.format(analyticsSetting.nextAnalyticsDate, 'yyyy-MM-dd') == #temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                            오늘 분석 요청
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- 계정 탈퇴 -->
+            <!-- 위험 구역 -->
             <div class="danger-zone-card">
                 <div class="danger-header">
                     <h2 class="danger-title">위험 구역</h2>
@@ -120,6 +120,32 @@
                 </div>
 
                 <div class="danger-content">
+                    <div class="danger-item">
+                        <div class="danger-info">
+                            <div class="danger-item-title">API 키 전체 삭제</div>
+                            <div class="danger-item-desc">
+                                생성한 모든 API 키가 영구적으로 삭제됩니다.<br>
+                                • 모든 API 키가 즉시 비활성화됩니다<br>
+                                • 해당 키를 사용하는 모든 서비스가 중단됩니다<br>
+                                • 이 작업은 되돌릴 수 없습니다
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="showDeleteAllApiKeysModal()">API 키 전체 삭제</button>
+                    </div>
+
+                    <div class="danger-item">
+                        <div class="danger-info">
+                            <div class="danger-item-title">분석 보고서 전체 삭제</div>
+                            <div class="danger-item-desc">
+                                생성된 모든 분석 보고서가 영구적으로 삭제됩니다.<br>
+                                • 과거 분석 데이터를 모두 잃게 됩니다<br>
+                                • 분석 설정은 유지됩니다<br>
+                                • 이 작업은 되돌릴 수 없습니다
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="showDeleteAllAnalyticsModal()">분석 보고서 전체 삭제</button>
+                    </div>
+
                     <div class="danger-item">
                         <div class="danger-info">
                             <div class="danger-item-title">계정 탈퇴</div>
@@ -133,6 +159,58 @@
                         <button class="btn-danger" onclick="showDeleteAccountModal()">계정 탈퇴</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API 키 전체 삭제 확인 모달 -->
+    <div id="deleteAllApiKeysModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>API 키 전체 삭제 확인</h3>
+                <button class="modal-close" onclick="closeDeleteAllApiKeysModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <strong>이 작업은 되돌릴 수 없습니다!</strong><br>
+                        모든 API 키가 영구적으로 삭제됩니다.
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                    정말로 모든 API 키를 삭제하시겠습니까?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeDeleteAllApiKeysModal()">취소</button>
+                <button class="btn-danger" onclick="deleteAllApiKeys()">전체 삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 분석 보고서 전체 삭제 확인 모달 -->
+    <div id="deleteAllAnalyticsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>분석 보고서 전체 삭제 확인</h3>
+                <button class="modal-close" onclick="closeDeleteAllAnalyticsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <strong>이 작업은 되돌릴 수 없습니다!</strong><br>
+                        모든 분석 보고서가 영구적으로 삭제됩니다.
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                    정말로 모든 분석 보고서를 삭제하시겠습니까?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeDeleteAllAnalyticsModal()">취소</button>
+                <button class="btn-danger" onclick="deleteAllAnalytics()">전체 삭제</button>
             </div>
         </div>
     </div>

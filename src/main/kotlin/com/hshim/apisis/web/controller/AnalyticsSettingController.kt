@@ -18,4 +18,10 @@ class AnalyticsSettingController(
         val userId = UserUtil.getCurrentUserId()
         analyticsSettingCommandService.update(userId, request)
     }
+
+    @PutMapping("/request")
+    fun request() {
+        val userId = UserUtil.getCurrentUserId()
+        analyticsSettingCommandService.request(userId)
+    }
 }

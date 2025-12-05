@@ -14,7 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
         analyticsRange.disabled = !isEnabled;
     }
 
-    analyticsEnabled.addEventListener('change', updateAnalyticsUI);
+    analyticsEnabled.addEventListener('change', function() {
+        updateAnalyticsUI();
+        saveAnalyticsSettings();
+    });
+
+    analyticsRange.addEventListener('change', function() {
+        saveAnalyticsSettings();
+    });
+
     updateAnalyticsUI();
 });
 
@@ -39,6 +47,91 @@ async function saveAnalyticsSettings() {
         }
 
         showToast('✓ 설정이 저장되었습니다');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ ' + error.message);
+    }
+}
+
+async function requestAnalytics() {
+    try {
+        const response = await fetch('/web/analytics-setting/request', {
+            method: 'PUT',
+        });
+
+        if (!response.ok) {
+            throw new Error('분석 요청에 실패했습니다');
+        }
+
+        showToast('✓ 분석 요청이 완료되었습니다');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ ' + error.message);
+    }
+}
+
+// API 키 전체 삭제 모달
+function showDeleteAllApiKeysModal() {
+    document.getElementById('deleteAllApiKeysModal').style.display = 'flex';
+}
+
+function closeDeleteAllApiKeysModal() {
+    document.getElementById('deleteAllApiKeysModal').style.display = 'none';
+}
+
+async function deleteAllApiKeys() {
+    try {
+        const response = await fetch('/web/keys', {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('API 키 전체 삭제에 실패했습니다');
+        }
+
+        showToast('✓ 모든 API 키가 삭제되었습니다');
+        closeDeleteAllApiKeysModal();
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ ' + error.message);
+    }
+}
+
+// 분석 보고서 전체 삭제 모달
+function showDeleteAllAnalyticsModal() {
+    document.getElementById('deleteAllAnalyticsModal').style.display = 'flex';
+}
+
+function closeDeleteAllAnalyticsModal() {
+    document.getElementById('deleteAllAnalyticsModal').style.display = 'none';
+}
+
+async function deleteAllAnalytics() {
+    try {
+        const response = await fetch('/web/analytics', {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('분석 보고서 전체 삭제에 실패했습니다');
+        }
+
+        showToast('✓ 모든 분석 보고서가 삭제되었습니다');
+        closeDeleteAllAnalyticsModal();
+
         setTimeout(() => {
             window.location.reload();
         }, 1000);
@@ -89,9 +182,16 @@ async function deleteAccount() {
 
 // 모달 외부 클릭시 닫기
 window.addEventListener('click', function(event) {
-    const modal = document.getElementById('deleteAccountModal');
-    if (event.target === modal) {
+    const deleteAccountModal = document.getElementById('deleteAccountModal');
+    const deleteAllApiKeysModal = document.getElementById('deleteAllApiKeysModal');
+    const deleteAllAnalyticsModal = document.getElementById('deleteAllAnalyticsModal');
+
+    if (event.target === deleteAccountModal) {
         closeDeleteAccountModal();
+    } else if (event.target === deleteAllApiKeysModal) {
+        closeDeleteAllApiKeysModal();
+    } else if (event.target === deleteAllAnalyticsModal) {
+        closeDeleteAllAnalyticsModal();
     }
 });
 
@@ -99,5 +199,7 @@ window.addEventListener('click', function(event) {
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeDeleteAccountModal();
+        closeDeleteAllApiKeysModal();
+        closeDeleteAllAnalyticsModal();
     }
 });

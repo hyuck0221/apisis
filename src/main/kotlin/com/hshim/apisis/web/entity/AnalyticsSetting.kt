@@ -32,4 +32,4 @@ class AnalyticsSetting(
     @Column(nullable = false)
     var nextAnalyticsDate: LocalDate,
 
-    ) : BaseTimeEntity()
+) : BaseTimeEntity()

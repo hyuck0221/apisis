@@ -71,6 +71,26 @@
                 </div>
             </div>
 
+            <!-- 분석 보고서 표시 -->
+            <div class="analytics-report-container" th:if="${analyticsSetting != null && analyticsSetting.enabled}" style="display: none;">
+                <div class="report-controls">
+                    <div class="report-selector-wrapper">
+                        <div class="report-selector">
+                            <label for="reportSelect" class="report-label">분석 보고서 선택</label>
+                            <select id="reportSelect" class="report-select">
+                                <option value="">보고서를 선택해주세요</option>
+                            </select>
+                        </div>
+                        <button class="btn-delete-report" id="deleteReportBtn" onclick="deleteCurrentReport()" style="display: none;">
+                            이 보고서 삭제
+                        </button>
+                    </div>
+                </div>
+                <div class="report-viewer" id="reportViewer" style="display: none;">
+                    <iframe id="reportIframe" class="report-iframe" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+
             <!-- AI 데이터 수집 중 -->
             <div class="ai-collecting-state" th:if="${analyticsSetting != null && analyticsSetting.enabled}">
                 <div class="collecting-icon">
@@ -120,5 +140,6 @@
 
     <!-- 스크립트 -->
     <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:src="@{/js/analytics.js}"></script>
 </body>
 </html>

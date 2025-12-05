@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AnalyticsRepository : JpaRepository<Analytics, String> {
+    fun findAllByUserIdOrderBySearchStartDateDesc(userId: String): List<Analytics>
+    fun deleteAllByUserId(userId: String)
 }

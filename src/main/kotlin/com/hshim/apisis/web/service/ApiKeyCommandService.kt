@@ -55,4 +55,9 @@ class ApiKeyCommandService(
         apiCallLogRepository.deleteAllByApiKeyValue(keyValue)
         apiKeyRepository.deleteByKeyValue(keyValue)
     }
+
+    fun deleteAllByUserId(userId: String) {
+        apiKeyRepository.findAllByUserId(userId)
+            .forEach { delete(it.keyValue) }
+    }
 }

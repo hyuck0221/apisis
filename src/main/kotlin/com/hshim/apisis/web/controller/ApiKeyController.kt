@@ -32,11 +32,17 @@ class ApiKeyController(
     ) = apiKeyCommandService.updateName(keyValue, name)
 
     @PutMapping("/{keyValue}/activate")
-    fun activateApiKey(@PathVariable keyValue: String) = apiKeyCommandService.activate(keyValue)
+    fun activate(@PathVariable keyValue: String) = apiKeyCommandService.activate(keyValue)
 
     @PutMapping("/{keyValue}/deactivate")
-    fun deactivateApiKey(@PathVariable keyValue: String) = apiKeyCommandService.deactivate(keyValue)
+    fun deactivate(@PathVariable keyValue: String) = apiKeyCommandService.deactivate(keyValue)
 
     @DeleteMapping("/{keyValue}")
-    fun deleteApiKey(@PathVariable keyValue: String) = apiKeyCommandService.delete(keyValue)
+    fun delete(@PathVariable keyValue: String) = apiKeyCommandService.delete(keyValue)
+
+    @DeleteMapping
+    fun deleteAll() {
+        val userId = getCurrentUserId()
+        apiKeyCommandService.deleteAllByUserId(userId)
+    }
 }

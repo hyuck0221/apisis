@@ -274,6 +274,33 @@
     line-height: 1.4;
 }
 
+/* 버튼 스타일 */
+.btn-request {
+    background: linear-gradient(135deg, #40e0d0 0%, #48d1cc 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
+}
+
+.btn-request:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.4);
+}
+
+.btn-request:disabled {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* 설정 액션 */
 .setting-actions {
     padding-top: 16px;
