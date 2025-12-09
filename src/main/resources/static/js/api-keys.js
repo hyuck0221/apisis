@@ -188,6 +188,16 @@ setupModalCloseOnClickOutside('editNameModal', closeEditNameModal);
 
 // API 키 통계 목록 로드
 async function loadApiKeyStats() {
+    const listContainer = document.getElementById('apiKeyStatsList');
+
+    // 로딩 표시
+    listContainer.innerHTML = `
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>API 키 통계 로딩 중...</p>
+        </div>
+    `;
+
     try {
         const response = await fetch('/web/keys/stats');
 
@@ -196,7 +206,6 @@ async function loadApiKeyStats() {
         }
 
         const stats = await response.json();
-        const listContainer = document.getElementById('apiKeyStatsList');
 
         if (stats.length === 0) {
             listContainer.innerHTML = `

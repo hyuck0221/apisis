@@ -41,6 +41,20 @@ spring:
             scope:
               - profile_nickname
               - account_email
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/github"
+            scope:
+              - read:user
+              - user:email
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            scope:
+              - profile
+              - email
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -50,7 +64,7 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET:apisis-super-secret-key-change-this-in-production-environment-at-least-256-bits}
-  expiration: 2592000000  # 30일 (밀리초)
+  expiration: 86400000  # 1일
 
 kemi:
   gemini:

@@ -1,8 +1,12 @@
 package com.hshim.apisis.web
 
+import com.hshim.apisis.config.JwtUtil
+import com.hshim.apisis.user.repository.UserOAuth2ProviderRepository
 import com.hshim.apisis.user.repository.UserRepository
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserIdOrNull
 import com.hshim.apisis.web.service.AnalyticsSettingQueryService
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping
 class ViewController(
     private val userRepository: UserRepository,
     private val analyticsSettingQueryService: AnalyticsSettingQueryService,
+    private val jwtUtil: JwtUtil,
+    private val userOAuth2ProviderRepository: UserOAuth2ProviderRepository,
 ) {
 
     @GetMapping("/")
@@ -35,8 +41,18 @@ class ViewController(
         return "login"
     }
 
+    @GetMapping("/privacy")
+    fun privacy(): String {
+        return "privacy"
+    }
+
+    @GetMapping("/terms")
+    fun terms(): String {
+        return "terms"
+    }
+
     @GetMapping("/dashboard")
-    fun dashboard(model: Model): String {
+    fun dashboard(model: Model, request: HttpServletRequest): String {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
@@ -46,7 +62,12 @@ class ViewController(
             return "redirect:/login"
         }
 
+        // JWT 토큰에서 로그인 제공자 정보 추출
+        val jwtToken = request.cookies?.firstOrNull { it.name == "JWT_TOKEN" }?.value
+        val loginProvider = jwtToken?.let { jwtUtil.getLoginProviderFromToken(it) }
+
         model.addAttribute("user", user)
+        model.addAttribute("loginProvider", loginProvider)
         return "dashboard"
     }
 
@@ -136,7 +157,7 @@ class ViewController(
     }
 
     @GetMapping("/settings")
-    fun settings(model: Model): String {
+    fun settings(model: Model, request: HttpServletRequest): String {
         val userId = getCurrentUserIdOrNull() ?: return "redirect:/login"
 
         val user = userRepository.findByIdOrNull(userId)
@@ -145,7 +166,17 @@ class ViewController(
             return "redirect:/login"
         }
 
+        // JWT 토큰에서 로그인 제공자 정보 추출
+        val jwtToken = request.cookies?.firstOrNull { it.name == "JWT_TOKEN" }?.value
+        val loginProvider = jwtToken?.let { jwtUtil.getLoginProviderFromToken(it) }
+
+        // 사용자의 모든 OAuth2 제공자 조회
+        val userProviders = userOAuth2ProviderRepository.findAllByUserId(userId)
+        val providers = userProviders.map { it.provider.name }
+
         model.addAttribute("user", user)
+        model.addAttribute("loginProvider", loginProvider)
+        model.addAttribute("userProviders", providers)
         model.addAttribute("analyticsSetting", analyticsSettingQueryService.findBy(userId))
         return "settings"
     }

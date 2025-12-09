@@ -1,5 +1,6 @@
 package com.hshim.apisis.config
 
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -14,16 +15,20 @@ class JwtUtil(
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
 
-    fun generateToken(userId: String): String {
+    fun generateToken(userId: String, loginProvider: String? = null, expirationDate: Date? = null): String {
         val now = Date()
-        val expiryDate = Date(now.time + jwtProperties.expiration)
+        val expiryDate = expirationDate ?: Date(now.time + jwtProperties.expiration)
 
-        return Jwts.builder()
+        val builder = Jwts.builder()
             .subject(userId)
             .issuedAt(now)
             .expiration(expiryDate)
-            .signWith(secretKey)
-            .compact()
+
+        if (loginProvider != null) {
+            builder.claim("loginProvider", loginProvider)
+        }
+
+        return builder.signWith(secretKey).compact()
     }
 
     fun validateToken(token: String): Boolean {
@@ -46,6 +51,25 @@ class JwtUtil(
                 .parseSignedClaims(token)
                 .payload
                 .subject
+        } catch (e: ExpiredJwtException) {
+            // 만료된 토큰에서도 클레임 추출
+            e.claims.subject
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun getLoginProviderFromToken(token: String): String? {
+        return try {
+            Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .payload
+                .get("loginProvider", String::class.java)
+        } catch (e: ExpiredJwtException) {
+            // 만료된 토큰에서도 클레임 추출
+            e.claims.get("loginProvider", String::class.java)
         } catch (e: Exception) {
             null
         }

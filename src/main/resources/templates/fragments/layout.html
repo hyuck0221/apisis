@@ -118,7 +118,15 @@
                 <span th:text="${user != null and user.name != null ? #strings.substring(user.name, 0, 1) : 'U'}">U</span>
             </div>
             <div class="user-details">
-                <div class="user-name" th:text="${user != null ? user.name : 'User'}">User</div>
+                <div class="user-name-row">
+                    <span class="user-name" th:text="${user != null ? user.name : 'User'}">User</span>
+                    <span th:if="${loginProvider != null}" class="nav-login-badge"
+                          th:classappend="${loginProvider == 'KAKAO' ? 'kakao' : (loginProvider == 'GITHUB' ? 'github' : 'google')}">
+                        <span th:if="${loginProvider == 'KAKAO'}">Kakao</span>
+                        <span th:if="${loginProvider == 'GITHUB'}">GitHub</span>
+                        <span th:if="${loginProvider == 'GOOGLE'}">Google</span>
+                    </span>
+                </div>
                 <div class="user-email" th:text="${user != null ? user.email : 'user@example.com'}">user@example.com</div>
             </div>
         </div>

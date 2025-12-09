@@ -47,6 +47,51 @@ async function loadAnalyticsReports() {
 }
 
 async function loadReportHtml(reportId) {
+    const reportViewer = document.getElementById('reportViewer');
+    const iframe = document.getElementById('reportIframe');
+
+    // 로딩 표시
+    reportViewer.style.display = 'block';
+    iframe.srcdoc = `
+        <html>
+        <head>
+            <style>
+                body {
+                    margin: 0;
+                    padding: 40px;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 100vh;
+                }
+                .loading-spinner {
+                    width: 40px;
+                    height: 40px;
+                    margin: 0 auto 20px;
+                    border: 4px solid #f0f0f0;
+                    border-top: 4px solid #40E0D0;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                }
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                p {
+                    color: #999;
+                    font-size: 14px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="loading-spinner"></div>
+            <p>분석 보고서 로딩 중...</p>
+        </body>
+        </html>
+    `;
+
     try {
         const response = await fetch(`/web/analytics/${reportId}/html`);
         if (!response.ok) {
@@ -54,8 +99,6 @@ async function loadReportHtml(reportId) {
         }
 
         const html = await response.text();
-        const reportViewer = document.getElementById('reportViewer');
-        const iframe = document.getElementById('reportIframe');
 
         iframe.srcdoc = html;
         reportViewer.style.display = 'block';

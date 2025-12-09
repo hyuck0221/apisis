@@ -111,6 +111,16 @@ function maskApiKey(keyValue) {
 
 // API 키 목록 로드
 async function loadApiKeys() {
+    const listContainer = document.getElementById('apiKeyList');
+
+    // 로딩 표시
+    listContainer.innerHTML = `
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>API 키 로딩 중...</p>
+        </div>
+    `;
+
     try {
         const response = await fetch('/web/keys');
 
@@ -119,7 +129,6 @@ async function loadApiKeys() {
         }
 
         const keys = await response.json();
-        const listContainer = document.getElementById('apiKeyList');
 
         if (keys.length === 0) {
             listContainer.innerHTML = `

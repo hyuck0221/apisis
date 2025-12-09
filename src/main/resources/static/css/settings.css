@@ -88,12 +88,34 @@
 
 .provider-badge {
     display: inline-block;
-    padding: 6px 12px;
-    background: #fee500;
-    color: #000000;
-    border-radius: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
     font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.provider-badge.kakao {
+    background: #FEE500;
+    color: #3c1e1e;
+}
+
+.provider-badge.github {
+    background: #24292e;
+    color: #ffffff;
+}
+
+.provider-badge.google {
+    background: #4285F4;
+    color: #ffffff;
+}
+
+.provider-badge.active {
     font-weight: 700;
+    border-color: #40E0D0;
+    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.35), 0 3px 8px rgba(64, 224, 208, 0.25);
+    transform: scale(1.05);
 }
 
 /* 위험 구역 */

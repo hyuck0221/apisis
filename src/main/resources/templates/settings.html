@@ -50,9 +50,13 @@
 
                     <div class="setting-item">
                         <div class="setting-info">
-                            <div class="setting-label">로그인 방식</div>
+                            <div class="setting-label">연결된 로그인 방식</div>
                             <div class="setting-value">
-                                <span class="provider-badge" th:text="${user.provider}">KAKAO</span>
+                                <span th:each="provider : ${userProviders}"
+                                      class="provider-badge"
+                                      th:classappend="${(provider == 'KAKAO' ? 'kakao' : (provider == 'GITHUB' ? 'github' : 'google')) + ' ' + (provider == loginProvider ? 'active' : '')}"
+                                      th:text="${provider}"
+                                      style="margin-right: 12px;">KAKAO</span>
                             </div>
                         </div>
                     </div>

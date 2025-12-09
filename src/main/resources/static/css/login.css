@@ -190,6 +190,29 @@ body {
     box-shadow: 0 8px 20px rgba(254, 229, 0, 0.4);
 }
 
+.github-login {
+    background: #24292e;
+    color: #fff;
+}
+
+.github-login:hover {
+    background: #1b1f23;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(36, 41, 46, 0.4);
+}
+
+.google-login {
+    background: #fff;
+    color: #757575;
+    border: 1px solid #dadce0;
+}
+
+.google-login:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+}
+
 .login-icon {
     width: 24px;
     height: 24px;
