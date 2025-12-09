@@ -9,4 +9,5 @@ import java.time.LocalDate
 interface AnalyticsSettingRepository : JpaRepository<AnalyticsSetting, String> {
     fun findByUserId(userId: String): AnalyticsSetting?
     fun findAllTop10ByNextAnalyticsDateLessThanEqualOrderByNextAnalyticsDateAsc(date: LocalDate): List<AnalyticsSetting>
+    fun deleteByUserId(userId: String)
 }

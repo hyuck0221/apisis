@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface OAuth2TokenRepository : JpaRepository<OAuth2Token, String> {
     fun findByUserIdAndProvider(userId: String, provider: OAuth2Provider): OAuth2Token?
+    fun deleteAllByUserId(userId: String)
 }
