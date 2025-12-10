@@ -110,6 +110,7 @@ class ViewController(
         }
 
         model.addAttribute("user", user)
+        model.addAttribute("userPaymentType", user.license?.paymentType?.name ?: "FREE")
         return "api-docs"
     }
 
@@ -124,6 +125,7 @@ class ViewController(
         }
 
         model.addAttribute("user", user)
+        model.addAttribute("userPaymentType", user.license?.paymentType?.name ?: "FREE")
         return "api-list"
     }
 

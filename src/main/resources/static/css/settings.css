@@ -86,6 +86,49 @@
     font-weight: 500;
 }
 
+.license-key {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #40E0D0;
+    letter-spacing: 1px;
+}
+
+.license-warning {
+    color: #ff9800 !important;
+    font-weight: 700;
+}
+
+.license-expired {
+    color: #e74c3c !important;
+    font-weight: 700;
+}
+
+.license-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.license-input:focus {
+    outline: none;
+    border-color: #40E0D0;
+    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1);
+}
+
+.error-message {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 6px;
+    color: #e74c3c;
+    font-size: 14px;
+}
+
 .provider-badge {
     display: inline-block;
     padding: 8px 14px;

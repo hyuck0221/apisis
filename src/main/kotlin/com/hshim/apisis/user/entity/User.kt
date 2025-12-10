@@ -1,5 +1,6 @@
 package com.hshim.apisis.user.entity
 
+import com.hshim.apisis.license.entity.License
 import jakarta.persistence.*
 import org.springframework.security.oauth2.core.user.OAuth2User
 import util.CommonUtil.ulid
@@ -16,6 +17,10 @@ class User(
 
     @Column(nullable = false)
     val name: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "license_id", nullable = true)
+    var license: License? = null,
 
     @Column(nullable = false)
     val createdDate: LocalDateTime = LocalDateTime.now(),

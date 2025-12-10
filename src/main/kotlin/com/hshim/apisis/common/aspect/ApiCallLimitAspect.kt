@@ -1,9 +1,11 @@
 package com.hshim.apisis.common.aspect
 
-import com.hshim.apisis.web.entity.ApiCallLog
-import com.hshim.apisis.web.repository.ApiCallLogRepository
 import com.hshim.apisis.common.annotation.Information
 import com.hshim.apisis.common.model.Envelope
+import com.hshim.apisis.user.enums.PaymentType
+import com.hshim.apisis.web.entity.ApiCallLog
+import com.hshim.apisis.web.repository.ApiCallLogRepository
+import com.hshim.apisis.web.repository.ApiKeyRepository
 import jakarta.servlet.http.HttpServletRequest
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -20,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException
 @Component
 class ApiCallLimitAspect(
     private val apiCallLogRepository: ApiCallLogRepository,
+    private val apiKeyRepository: ApiKeyRepository,
     private val request: HttpServletRequest
 ) {
 
@@ -39,9 +42,22 @@ class ApiCallLimitAspect(
         val currentCnt =
             apiCallLogRepository.countByApiKeyValueAndUrlAndMethodAndCalledAtAfter(apiKeyValue, url, httpMethod)
 
-        if (information.callLimit in 1..currentCnt) throw ResponseStatusException(
+        val paymentType = apiKeyRepository.findPaymentTypeByKeyValue(apiKeyValue)
+        val callLimit = when (paymentType) {
+            null -> information.callLimitFree
+
+            PaymentType.BASIC_MONTH,
+            PaymentType.BASIC_YEAR -> information.callLimitBasic
+
+            PaymentType.PRO_MONTH,
+            PaymentType.PRO_YEAR -> information.callLimitPro
+
+            else -> -1
+        }
+
+        if (callLimit in 1..currentCnt) throw ResponseStatusException(
             HttpStatus.TOO_MANY_REQUESTS,
-            "API call limit exceeded. Limit: ${information.callLimit}"
+            "API call limit exceeded. Limit: $callLimit"
         )
 
         val startTime = System.currentTimeMillis()
@@ -87,6 +103,6 @@ class ApiCallLimitAspect(
             }.start()
         }
 
-        return ResponseEntity.ok(Envelope(information, currentCnt + 1, result, responseTimeMs))
+        return ResponseEntity.ok(Envelope(information, callLimit, currentCnt + 1, result, responseTimeMs))
     }
 }

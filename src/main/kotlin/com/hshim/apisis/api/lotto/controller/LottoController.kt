@@ -9,7 +9,6 @@ import com.hshim.apisis.common.annotation.Information
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -20,7 +19,9 @@ class LottoController(private val lottoQueryService: LottoQueryService) {
         title = "URL로 번호 조회",
         description = "로또 용지에 QR 인식 시 나오는 URL로 회차와 번호를 찾아냅니다",
         version = "1.0",
-        callLimit = 200000,
+        callLimitFree = 500,
+        callLimitBasic = 10000,
+        callLimitPro = 2500000
     )
     @GetMapping("/info/by-url")
     fun findLottoInfoByUrl(condition: LottoUrlSearchCondition): ResponseEntity<List<LottoNumberUrlDecodeResponse>> {
@@ -32,7 +33,9 @@ class LottoController(private val lottoQueryService: LottoQueryService) {
         title = "결과 조회",
         description = "회차로 로또 결과를 조회합니다",
         version = "1.0",
-        callLimit = 500000,
+        callLimitFree = 200,
+        callLimitBasic = 6000,
+        callLimitPro = 100000
     )
     @GetMapping("/by-times")
     fun findByTimes(condition: LottoDetailSearchCondition): ResponseEntity<LottoResponse> {

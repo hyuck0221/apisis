@@ -7,5 +7,7 @@ annotation class Information(
     val title: String,
     val description: String,
     val version: String,
-    val callLimit: Long = -1
+    val callLimitFree: Long = -1,
+    val callLimitBasic: Long = -1,
+    val callLimitPro: Long = -1,
 )

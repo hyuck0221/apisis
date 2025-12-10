@@ -40,6 +40,10 @@
 
     <!-- 스크립트 -->
     <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    <script th:inline="javascript">
+        const userPaymentType = /*[[${userPaymentType}]]*/ 'FREE';
+    </script>
+    <script th:src="@{/js/call-limit-util.js}"></script>
     <script th:src="@{/js/api-docs.js}"></script>
 </body>
 </html>

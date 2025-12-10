@@ -180,11 +180,108 @@ async function deleteAccount() {
     }
 }
 
+// 라이센스 등록 모달
+function showRegisterLicenseModal() {
+    document.getElementById('registerLicenseModal').style.display = 'flex';
+    document.getElementById('licenseKeyInput').value = '';
+    document.getElementById('licenseError').style.display = 'none';
+}
+
+function closeRegisterLicenseModal() {
+    document.getElementById('registerLicenseModal').style.display = 'none';
+}
+
+// 라이센스 키 입력 포맷팅
+document.addEventListener('DOMContentLoaded', function() {
+    const licenseInput = document.getElementById('licenseKeyInput');
+    if (licenseInput) {
+        licenseInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/-/g, '');
+            if (value.length > 16) value = value.substr(0, 16);
+            const formatted = value.match(/.{1,4}/g)?.join('-') || value;
+            e.target.value = formatted;
+        });
+    }
+});
+
+async function registerLicense() {
+    const licenseKey = document.getElementById('licenseKeyInput').value.trim();
+    const errorElement = document.getElementById('licenseError');
+
+    if (!licenseKey || licenseKey.length !== 19) {
+        errorElement.textContent = '올바른 라이센스 키 형식이 아닙니다 (xxxx-xxxx-xxxx-xxxx)';
+        errorElement.style.display = 'block';
+        return;
+    }
+
+    try {
+        const response = await fetch('/web/license/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                licenseKey: licenseKey
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('라이센스 등록에 실패했습니다');
+        }
+
+        showToast('✓ 라이센스가 등록되었습니다');
+        closeRegisterLicenseModal();
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        errorElement.textContent = error.message;
+        errorElement.style.display = 'block';
+    }
+}
+
+// 라이센스 해제 모달
+function showUnregisterLicenseModal() {
+    document.getElementById('unregisterLicenseModal').style.display = 'flex';
+}
+
+function closeUnregisterLicenseModal() {
+    document.getElementById('unregisterLicenseModal').style.display = 'none';
+}
+
+async function unregisterLicense() {
+    try {
+        const response = await fetch('/web/license', {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('라이센스 해제에 실패했습니다');
+        }
+
+        showToast('✓ 라이센스가 해제되었습니다');
+        closeUnregisterLicenseModal();
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('✗ ' + error.message);
+    }
+}
+
 // 모달 외부 클릭시 닫기
 window.addEventListener('click', function(event) {
     const deleteAccountModal = document.getElementById('deleteAccountModal');
     const deleteAllApiKeysModal = document.getElementById('deleteAllApiKeysModal');
     const deleteAllAnalyticsModal = document.getElementById('deleteAllAnalyticsModal');
+    const registerLicenseModal = document.getElementById('registerLicenseModal');
+    const unregisterLicenseModal = document.getElementById('unregisterLicenseModal');
 
     if (event.target === deleteAccountModal) {
         closeDeleteAccountModal();
@@ -192,6 +289,10 @@ window.addEventListener('click', function(event) {
         closeDeleteAllApiKeysModal();
     } else if (event.target === deleteAllAnalyticsModal) {
         closeDeleteAllAnalyticsModal();
+    } else if (event.target === registerLicenseModal) {
+        closeRegisterLicenseModal();
+    } else if (event.target === unregisterLicenseModal) {
+        closeUnregisterLicenseModal();
     }
 });
 
@@ -201,5 +302,7 @@ document.addEventListener('keydown', function(event) {
         closeDeleteAccountModal();
         closeDeleteAllApiKeysModal();
         closeDeleteAllAnalyticsModal();
+        closeRegisterLicenseModal();
+        closeUnregisterLicenseModal();
     }
 });

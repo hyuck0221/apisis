@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/web/docs")
 class APIDocsController(
-    private val apiInfoComponent: APIInfoComponent
+    private val apiInfoComponent: APIInfoComponent,
 ) {
     @GetMapping("/list")
     fun getAPIList(): List<APIInfoResponse> {

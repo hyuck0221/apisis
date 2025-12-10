@@ -83,6 +83,7 @@ function renderAPIList(apis) {
 // API 카드 생성
 function generateAPICard(api) {
     const apiId = getAPIId(api);
+    const callLimitText = formatCallLimitText(api, userPaymentType);
 
     return `
         <div class="api-card" onclick="goToAPIDoc('${apiId}')">
@@ -100,6 +101,9 @@ function generateAPICard(api) {
             <div class="api-card-endpoint">
                 <span class="api-card-method ${api.method}">${api.method}</span>
                 <code class="api-card-url">${escapeHtml(api.url)}</code>
+            </div>
+            <div class="api-card-meta">
+                <span class="api-card-limit">📊 호출 제한: ${callLimitText}</span>
             </div>
             <div class="api-card-footer">
                 <div class="api-card-actions">

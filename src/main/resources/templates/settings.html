@@ -70,6 +70,73 @@
                 </div>
             </div>
 
+            <!-- 라이센스 설정 -->
+            <div class="settings-card">
+                <div class="settings-header">
+                    <h2 class="settings-title">라이센스 관리</h2>
+                    <p class="settings-subtitle">라이센스 등록 및 관리</p>
+                </div>
+
+                <div class="settings-content">
+                    <div class="setting-item" th:if="${user.license != null}">
+                        <div class="setting-info">
+                            <div class="setting-label">현재 라이센스</div>
+                            <div class="setting-value">
+                                <span class="license-key" th:text="${user.license.id}">xxxx-xxxx-xxxx-xxxx</span>
+                            </div>
+                        </div>
+                        <button class="btn-request" onclick="showRegisterLicenseModal()">변경</button>
+                    </div>
+
+                    <div class="setting-item" th:if="${user.license == null}">
+                        <div class="setting-info">
+                            <div class="setting-label">라이센스 등록</div>
+                            <div class="setting-desc">xxxx-xxxx-xxxx-xxxx 형태의 라이센스 키를 입력하세요</div>
+                        </div>
+                        <button class="btn-request" onclick="showRegisterLicenseModal()">등록</button>
+                    </div>
+
+                    <div class="setting-item" th:if="${user.license != null}">
+                        <div class="setting-info">
+                            <div class="setting-label">플랜</div>
+                            <div class="setting-value">
+                                <span th:if="${user.license.paymentType.name() == 'EXTRA'}" th:text="${user.license.paymentType.name()}">EXTRA</span>
+                                <span th:if="${user.license.paymentType.name() != 'EXTRA'}">
+                                    <span th:text="${#strings.substringBefore(user.license.paymentType.name(), '_')}">BASIC</span>
+                                    <span> / </span>
+                                    <span th:text="${#strings.substringAfter(user.license.paymentType.name(), '_') == 'MONTH' ? '월' : '년'}">월</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" th:if="${user.license != null && user.license.expiredDate != null}">
+                        <div class="setting-info">
+                            <div class="setting-label">만료일</div>
+                            <div class="setting-value">
+                                <span th:classappend="${#temporals.createNow().isAfter(user.license.expiredDate)} ? 'license-expired' : (${#temporals.createNow().plusDays(3).isAfter(user.license.expiredDate)} ? 'license-warning' : '')"
+                                      th:text="${#temporals.format(user.license.expiredDate, 'yyyy년 MM월 dd일 HH시 mm분')}">2025년 01월 01일 00시 00분</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" th:if="${user.license != null && user.license.paymentType.name() == 'EXTRA'}">
+                        <div class="setting-info">
+                            <div class="setting-label">만료일</div>
+                            <div class="setting-value">무제한</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" th:if="${user.license != null}">
+                        <div class="setting-info">
+                            <div class="setting-label">라이센스 해제</div>
+                            <div class="setting-desc">라이센스를 해제하면 무료 플랜으로 전환됩니다</div>
+                        </div>
+                        <button class="btn-danger" onclick="showUnregisterLicenseModal()">해제</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- 분석 설정 -->
             <div class="settings-card">
                 <div class="settings-header">
@@ -155,8 +222,8 @@
                             <div class="danger-item-title">계정 탈퇴</div>
                             <div class="danger-item-desc">
                                 계정을 탈퇴하면 모든 데이터가 영구적으로 삭제됩니다.<br>
-                                • 생성한 모든 API 키가 삭제됩니다<br>
-                                • API 호출 기록이 모두 삭제됩니다<br>
+                                • 계정과 관련한 모든 정보가 삭제됩니다<br>
+                                • 사용중인 라이센스는 다른 계정에서 이어서 사용할 수 있으나 유실될 수 있습니다<br>
                                 • 이 작업은 되돌릴 수 없습니다
                             </div>
                         </div>
@@ -242,6 +309,50 @@
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeDeleteAccountModal()">취소</button>
                 <button class="btn-danger" onclick="deleteAccount()">계정 탈퇴</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 라이센스 등록 모달 -->
+    <div id="registerLicenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>라이센스 등록</h3>
+                <button class="modal-close" onclick="closeRegisterLicenseModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: #666; font-size: 14px;">
+                    라이센스 키를 입력해주세요
+                </p>
+                <input type="text" id="licenseKeyInput" class="license-input" placeholder="xxxx-xxxx-xxxx-xxxx" maxlength="19">
+                <p id="licenseError" class="error-message" style="display: none; color: #e74c3c; margin-top: 10px; font-size: 14px;"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRegisterLicenseModal()">취소</button>
+                <button class="btn-primary" onclick="registerLicense()">등록</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 라이센스 해제 확인 모달 -->
+    <div id="unregisterLicenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>라이센스 해제 확인</h3>
+                <button class="modal-close" onclick="closeUnregisterLicenseModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <strong>라이센스를 해제하시겠습니까?</strong><br>
+                        무료 플랜으로 전환되며, 일부 기능이 제한됩니다.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeUnregisterLicenseModal()">취소</button>
+                <button class="btn-danger" onclick="unregisterLicense()">해제</button>
             </div>
         </div>
     </div>

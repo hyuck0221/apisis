@@ -134,7 +134,7 @@ function generateAPIItem(api) {
                             </button>
                         </div>
                     </div>
-                    ${api.callLimit > 0 ? `<div class="api-meta"><span class="api-limit">호출 제한: ${api.callLimit}회/일</span></div>` : ''}
+                    <div class="api-meta"><span class="api-limit">📊 호출 제한: ${formatCallLimitText(api, userPaymentType)}</span></div>
                 </div>
                 <div class="api-actions">
                     <a href="/playground?api=${encodeURIComponent(api.url)}&method=${api.method}" class="try-api-btn">
