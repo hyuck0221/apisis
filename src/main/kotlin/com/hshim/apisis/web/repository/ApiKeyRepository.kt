@@ -20,7 +20,7 @@ interface ApiKeyRepository : JpaRepository<ApiKey, String> {
             inner join User u on u.id = ak.user.id 
             inner join License l on l.id = u.license.id 
             where ak.keyValue = :keyValue 
-            and l.expiredDate >= now()
+            and (l.expiredDate is null or l.expiredDate >= now())
         """
     )
     fun findPaymentTypeByKeyValue(keyValue: String): PaymentType?

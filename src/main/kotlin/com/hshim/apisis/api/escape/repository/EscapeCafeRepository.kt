@@ -31,8 +31,8 @@ interface EscapeCafeRepository : JpaRepository<EscapeCafe, String> {
                 or ec.area like concat('%', :search, '%')
                 or ec.address like concat('%', :search, '%')
             )
-            and ec.location like concat('%', :search, '%')
-            and ec.area like concat('%', :search, '%')
+            and ec.location like concat('%', :location, '%')
+            and ec.area like concat('%', :area, '%')
         """
     )
     fun findAllBySearch(
