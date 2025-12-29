@@ -3,6 +3,7 @@ package com.hshim.apisis.api.escape.model
 import com.hshim.apisis.api.escape.entity.EscapeCafe
 import com.hshim.apisis.api.escape.entity.EscapeTheme
 import com.hshim.apisis.common.annotation.FieldDescription
+import util.DateUtil.dateToString
 
 class EscapeCafeResponse(
     @FieldDescription("카페 ID")
@@ -37,6 +38,9 @@ class EscapeCafeResponse(
 
     @FieldDescription("카페 테마 목록")
     val themes: List<EscapeThemeResponse>,
+
+    @FieldDescription("등록일자")
+    val createDate: String,
 ) {
     constructor(escapeCafe: EscapeCafe) : this(
         id = escapeCafe.id,
@@ -50,6 +54,7 @@ class EscapeCafeResponse(
         phoneNo = escapeCafe.phoneNo,
         homepage = escapeCafe.homepage,
         themes = emptyList(),
+        createDate = escapeCafe.createDate.dateToString(),
     )
 
     constructor(escapeCafe: EscapeCafe, escapeThemes: List<EscapeTheme>) : this(
@@ -64,5 +69,6 @@ class EscapeCafeResponse(
         phoneNo = escapeCafe.phoneNo,
         homepage = escapeCafe.homepage,
         themes = escapeThemes.map { EscapeThemeResponse(it) },
+        createDate = escapeCafe.createDate.dateToString(),
     )
 }

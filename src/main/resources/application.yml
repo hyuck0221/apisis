@@ -69,12 +69,12 @@ jwt:
 kemi:
   gemini:
     enabled: true
-    api-key: ${GEMINI_API_KEY}
+    api-keys:
+      - ${GEMINI_API_KEY}
     models:
+      - gemini-3.0-flash
       - gemini-2.5-flash
       - gemini-2.5-flash-lite
-      - gemini-2.0-flash
-      - gemini-2.0-flash-lite
 
 escape:
   theme:

@@ -40,8 +40,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("com.github.hyuck0221:kotlin-utils:0.0.2")
-    implementation("com.github.hyuck0221:kemi:0.0.6")
+    implementation("com.github.hyuck0221:kotlin-utils:0.0.4")
+    implementation("com.github.hyuck0221:kemi:0.1.2")
 }
 
 kotlin {
