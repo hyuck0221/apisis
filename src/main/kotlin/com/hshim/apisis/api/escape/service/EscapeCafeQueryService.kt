@@ -7,12 +7,20 @@ import com.hshim.apisis.api.escape.model.EscapeCafeSearchCondition
 import com.hshim.apisis.api.escape.repository.EscapeCafeRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Transactional(readOnly = true)
 class EscapeCafeQueryService(private val escapeCafeRepository: EscapeCafeRepository) {
+
+    fun findById(id: String): EscapeCafe {
+        return escapeCafeRepository.findByIdOrNull(id)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "escape cafe not found")
+    }
 
     fun findAllCafesLocation(): List<EscapeCafeLocationResponse> {
         return escapeCafeRepository.findAllByGroupByLocation()

@@ -5,16 +5,19 @@ import com.hshim.apisis.api.escape.entity.EscapeTheme
 import com.hshim.apisis.api.escape.model.EscapeThemeOpenAPIRequest
 import com.hshim.apisis.api.escape.model.EscapeThemeOpenAPIResponse
 import com.hshim.apisis.api.escape.model.EscapeThemeOpenAPISearchCondition
+import com.hshim.apisis.api.escape.model.EscapeThemeResponse
 import com.hshim.apisis.api.escape.model.EscapeThemeSearchCondition
 import com.hshim.apisis.api.escape.repository.EscapeThemeRepository
 import com.hshim.apisis.properties.EscapeCrawlingProperties
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
@@ -27,6 +30,11 @@ class EscapeThemeQueryService(
     private val properties: EscapeCrawlingProperties,
 ) {
     private val restTemplate = RestTemplate()
+
+    fun findById(id: Long): EscapeTheme {
+        return escapeThemeRepository.findByIdOrNull(id)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "escape theme not found")
+    }
 
     fun findAllByCafes(cafes: List<EscapeCafe>): List<EscapeTheme> {
         return escapeThemeRepository.findAllByEscapeCafeIn(cafes)

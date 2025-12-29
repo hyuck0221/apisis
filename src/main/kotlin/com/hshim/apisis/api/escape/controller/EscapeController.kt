@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -19,7 +20,7 @@ class EscapeController(
 ) {
     @Information(
         category = "방탈출",
-        title = "카페 지역 검색",
+        title = "방탈출 카페 지역 검색",
         description = "전국의 방탈출 카페가 있는 지역을 검색합니다",
         version = "1.0",
         callLimitFree = 100,
@@ -33,7 +34,7 @@ class EscapeController(
 
     @Information(
         category = "방탈출",
-        title = "카페 검색",
+        title = "방탈출 카페 검색",
         description = "전국의 방탈출 카페를 검색합니다",
         version = "1.0",
         callLimitFree = 200,
@@ -56,7 +57,7 @@ class EscapeController(
 
     @Information(
         category = "방탈출",
-        title = "카페 위도/경도 검색",
+        title = "방탈출 카페 위도/경도 검색",
         description = "전국의 방탈출 카페를 위도/경도로 검색합니다",
         version = "1.0",
         callLimitFree = 200,
@@ -76,7 +77,7 @@ class EscapeController(
 
     @Information(
         category = "방탈출",
-        title = "테마 검색",
+        title = "방탈출 테마 검색",
         description = "전국의 방탈출 카페 테마를 검색합니다",
         version = "1.0",
         callLimitFree = 300,
@@ -89,6 +90,36 @@ class EscapeController(
         pageable: Pageable,
     ): ResponseEntity<Page<EscapeThemeResponse>> {
         val response = escapeThemeQueryService.findAllPageBy(condition, pageable).map { EscapeThemeResponse(it) }
+        return ResponseEntity.ok(response)
+    }
+
+    @Information(
+        category = "방탈출",
+        title = "방탈출 카페 상세",
+        description = "Id로 카페 정보를 검색합니다",
+        version = "1.0",
+        callLimitFree = 300,
+        callLimitBasic = 9000,
+        callLimitPro = 150000,
+    )
+    @GetMapping("/cafes/{id}")
+    fun findCafeById(@PathVariable id: String): ResponseEntity<EscapeCafeResponse> {
+        val response = escapeCafeQueryService.findById(id).let(::EscapeCafeResponse)
+        return ResponseEntity.ok(response)
+    }
+
+    @Information(
+        category = "방탈출",
+        title = "방탈출 테마 상세",
+        description = "Id로 테마 정보를 검색합니다",
+        version = "1.0",
+        callLimitFree = 300,
+        callLimitBasic = 9000,
+        callLimitPro = 150000,
+    )
+    @GetMapping("/themes/{id}")
+    fun findThemeById(@PathVariable id: Long): ResponseEntity<EscapeThemeResponse> {
+        val response = escapeThemeQueryService.findById(id).let(::EscapeThemeResponse)
         return ResponseEntity.ok(response)
     }
 }
