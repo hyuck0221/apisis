@@ -47,22 +47,25 @@
 
 /* 카테고리 섹션 */
 .category-section {
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #e8eaed;
 }
 
 .category-header {
-    background: white;
-    border-radius: 12px;
-    padding: 16px 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 20px 24px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     user-select: none;
+    border-bottom: 1px solid #e8eaed;
 }
 
 .category-header:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #f8f9fa 0%, #eceff1 100%);
 }
 
 .category-header-content {
@@ -82,19 +85,20 @@
 }
 
 .category-title {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: #1a1a1a;
     margin: 0;
 }
 
 .category-count {
-    background: #f0f0f0;
-    color: #666;
-    padding: 4px 12px;
-    border-radius: 12px;
+    background: linear-gradient(135deg, #e8f5ff 0%, #d0ebff 100%);
+    color: #0066cc;
+    padding: 6px 14px;
+    border-radius: 16px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+    border: 1px solid #b3d9ff;
 }
 
 .category-toggle {
@@ -115,23 +119,53 @@
 .api-list {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.5s ease;
+    padding: 0 20px 0 20px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7f9 100%);
 }
 
 .api-list.expanded {
-    max-height: 10000px;
+    max-height: none;
+    padding: 20px;
 }
 
 /* API 아이템 */
 .api-item {
     background: white;
     border-radius: 12px;
-    padding: 20px;
-    margin-top: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     scroll-margin-top: 80px;
+    border: 1px solid #e0e4e8;
+    transition: all 0.3s ease;
+    position: relative;
     overflow: hidden;
-    max-width: 100%;
+}
+
+.api-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #40E0D0 0%, #1ABC9C 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.api-item:hover::before {
+    opacity: 1;
+}
+
+.api-item:hover {
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.15);
+    border-color: #40E0D0;
+    transform: translateX(2px);
+}
+
+.api-item:last-child {
+    margin-bottom: 0;
 }
 
 .api-item:target {
@@ -140,10 +174,12 @@
 
 @keyframes highlight {
     0% {
-        box-shadow: 0 0 0 4px rgba(64, 224, 208, 0.4);
+        box-shadow: 0 0 0 4px rgba(64, 224, 208, 0.6);
+        border-color: #40E0D0;
     }
     100% {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        border-color: #e0e4e8;
     }
 }
 
@@ -152,9 +188,15 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+    border-radius: 10px 10px 0 0;
+}
+
+.api-header:hover {
+    background: rgba(64, 224, 208, 0.05);
 }
 
 .api-title-group {
@@ -291,9 +333,9 @@
 
 .api-actions {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-end;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
 }
 
 .try-api-btn {
@@ -340,6 +382,31 @@
     height: 14px;
 }
 
+/* API 상세 내용 */
+.api-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding: 0 20px;
+}
+
+.api-details.expanded {
+    max-height: none;
+    padding: 0 20px 20px 20px;
+}
+
+.api-toggle-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #666;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.api-toggle-icon.expanded {
+    transform: rotate(180deg);
+}
+
 /* 스키마 섹션 */
 .schema-section {
     margin-top: 12px;
@@ -363,9 +430,8 @@
     padding-top: 36px;
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 12px;
-    line-height: 1.5;
-    overflow-x: auto;
-    max-width: 100%;
+    line-height: 1.6;
+    overflow: visible;
     color: #333;
     user-select: text;
 }
@@ -374,10 +440,10 @@
     margin: 0;
     color: #333;
     user-select: text;
-    overflow-x: auto;
-    max-width: 100%;
+    overflow: visible;
     white-space: pre-wrap;
     word-wrap: break-word;
+    word-break: break-word;
 }
 
 .schema-copy-btn {
@@ -570,21 +636,35 @@
         font-size: 14px;
     }
 
+    .category-section {
+        border-radius: 12px;
+    }
+
     .category-header {
-        padding: 16px 20px;
+        padding: 16px 18px;
     }
 
     .category-title {
         font-size: 18px;
     }
 
+    .api-list.expanded {
+        padding: 16px;
+    }
+
     .api-item {
-        padding: 20px;
+        margin-bottom: 12px;
     }
 
     .api-header {
         flex-direction: column;
         gap: 12px;
+        padding: 16px;
+    }
+
+    .api-actions {
+        width: 100%;
+        justify-content: space-between;
     }
 
     .api-endpoint {
@@ -601,24 +681,53 @@
         width: 100%;
     }
 
+    .api-details.expanded {
+        padding: 0 16px 16px 16px;
+    }
+
     .schema-content {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 
 @media (max-width: 480px) {
+    .category-section {
+        border-radius: 10px;
+    }
+
+    .category-header {
+        padding: 14px 16px;
+    }
+
     .category-title-group {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
     }
 
-    .api-title {
+    .category-title {
         font-size: 16px;
+    }
+
+    .api-list.expanded {
+        padding: 12px;
+    }
+
+    .api-header {
+        padding: 14px;
+    }
+
+    .api-title {
+        font-size: 15px;
+    }
+
+    .api-actions {
+        flex-wrap: wrap;
     }
 
     .schema-content {
         font-size: 11px;
-        padding: 12px;
+        padding: 10px;
+        padding-top: 32px;
     }
 }

@@ -115,7 +115,7 @@ function generateAPIItem(api) {
 
     return `
         <div class="api-item" id="${apiId}">
-            <div class="api-header">
+            <div class="api-header" onclick="toggleAPIDetails('${apiId}')">
                 <div class="api-title-group">
                     <div class="api-title-with-version">
                         <span class="api-version">v${escapeHtml(api.version)}</span>
@@ -126,7 +126,7 @@ function generateAPIItem(api) {
                         <span class="method-badge ${api.method}">${api.method}</span>
                         <div class="api-url-container">
                             <code class="api-url">${escapeHtml(api.url)}</code>
-                            <button class="copy-url-btn" onclick="copyURL('${escapeHtml(api.url)}')" title="URL 복사">
+                            <button class="copy-url-btn" onclick="event.stopPropagation(); copyURL('${escapeHtml(api.url)}')" title="URL 복사">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -136,7 +136,10 @@ function generateAPIItem(api) {
                     </div>
                     <div class="api-meta"><span class="api-limit">📊 호출 제한: ${formatCallLimitText(api, userPaymentType)}</span></div>
                 </div>
-                <div class="api-actions">
+                <div class="api-actions" onclick="event.stopPropagation()">
+                    <svg class="api-toggle-icon" id="toggle-${apiId}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
                     <a href="/playground?api=${encodeURIComponent(api.url)}&method=${api.method}" class="try-api-btn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
@@ -152,6 +155,7 @@ function generateAPIItem(api) {
                     </a>
                 </div>
             </div>
+            <div class="api-details" id="details-${apiId}">
 
             ${hasRequest ? `
                 <div class="schema-section">
@@ -191,6 +195,7 @@ function generateAPIItem(api) {
                     </button>
                     <pre>${renderJSONSchema(api.responseSchema)}</pre>
                 </div>
+            </div>
             </div>
         </div>
     `;
@@ -324,6 +329,20 @@ function toggleCategory(categoryId) {
     }
 }
 
+// API 상세 토글
+function toggleAPIDetails(apiId) {
+    const details = document.getElementById(`details-${apiId}`);
+    const toggle = document.getElementById(`toggle-${apiId}`);
+
+    if (details.classList.contains('expanded')) {
+        details.classList.remove('expanded');
+        toggle.classList.remove('expanded');
+    } else {
+        details.classList.add('expanded');
+        toggle.classList.add('expanded');
+    }
+}
+
 // 특정 API로 스크롤
 function scrollToAPI(apiId) {
     const element = document.getElementById(apiId);
@@ -339,6 +358,14 @@ function scrollToAPI(apiId) {
                 list.classList.add('expanded');
                 toggle.classList.add('expanded');
             }
+        }
+
+        // API 상세 펼치기
+        const details = document.getElementById(`details-${apiId}`);
+        const apiToggle = document.getElementById(`toggle-${apiId}`);
+        if (details && !details.classList.contains('expanded')) {
+            details.classList.add('expanded');
+            apiToggle.classList.add('expanded');
         }
 
         // 스크롤
