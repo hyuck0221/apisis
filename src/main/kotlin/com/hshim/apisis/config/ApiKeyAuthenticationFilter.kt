@@ -24,6 +24,11 @@ class ApiKeyAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        if (request.method == "OPTIONS") {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         if (request.requestURI.startsWith("/api/")) {
             val apiKey = request.getHeader(API_KEY_HEADER)
             if (apiKey != null) {

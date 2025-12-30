@@ -84,10 +84,11 @@ class McpService(
                     }
 
                     val securityGuide = """
-                        [API Usage & Security Guide]
-                        1. Authentication: All requests must include 'X-API-Key' header.
-                        2. Security: Never expose the API Key in client-side code (frontend). 
-                        3. Management: Use environment variables for API keys and do not commit them to version control.
+                        [Apisis API Information]
+                        1. Base URL: https://apisis.dev
+                        2. Authentication: All requests must include 'X-API-Key' header.
+                        3. Security: Never expose the API Key in client-side code (frontend). 
+                        4. Management: Use environment variables for API keys and do not commit them to version control.
                     """.trimIndent()
 
                     mapOf(

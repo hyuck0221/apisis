@@ -31,6 +31,11 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        if (request.method == "OPTIONS") {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         val requestPath = request.requestURI
         if (!requestPath.startsWith("/api/")) {
             val token = extractToken(request)
