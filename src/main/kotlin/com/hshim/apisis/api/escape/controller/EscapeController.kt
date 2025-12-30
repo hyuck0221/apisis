@@ -104,8 +104,9 @@ class EscapeController(
     )
     @GetMapping("/cafes/{id}")
     fun findCafeById(@PathVariable id: String): ResponseEntity<EscapeCafeResponse> {
-        val response = escapeCafeQueryService.findById(id).let(::EscapeCafeResponse)
-        return ResponseEntity.ok(response)
+        val cafe = escapeCafeQueryService.findById(id)
+        val themes = escapeThemeQueryService.findAllByCafes(listOf(cafe))
+        return ResponseEntity.ok(EscapeCafeResponse(cafe, themes))  
     }
 
     @Information(
