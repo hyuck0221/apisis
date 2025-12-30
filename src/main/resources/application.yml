@@ -24,7 +24,7 @@ spring:
     mcp:
       server:
         type: SYNC
-        protocol: STDIO
+        protocol: SSE
         annotation-scanner:
           enabled: true
 
