@@ -23,7 +23,6 @@ spring:
   ai:
     mcp:
       server:
-        sse
         type: SYNC
         sse-endpoint: /mcp/sse
 
