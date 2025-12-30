@@ -23,10 +23,9 @@ spring:
   ai:
     mcp:
       server:
+        sse
         type: SYNC
-        protocol: SSE
-        annotation-scanner:
-          enabled: true
+        sse-endpoint: /mcp/sse
 
   cache:
     type: caffeine
