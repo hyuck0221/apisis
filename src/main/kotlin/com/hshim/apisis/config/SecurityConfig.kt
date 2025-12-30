@@ -9,6 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
+
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
@@ -17,6 +19,14 @@ class SecurityConfig(
     private val customOAuth2UserService: CustomOAuth2UserService,
     private val oAuth2SuccessHandler: OAuth2SuccessHandler
 ) {
+
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { web ->
+            web.ignoring().requestMatchers("/mcp/**")
+        }
+    }
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http

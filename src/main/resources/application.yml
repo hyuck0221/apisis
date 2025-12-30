@@ -1,7 +1,10 @@
 server:
   port: 8080
+  shutdown: graceful
 
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 5s
   application:
     name: apisis
   datasource:
@@ -20,11 +23,6 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
         dialect: org.hibernate.dialect.MariaDBDialect
-  ai:
-    mcp:
-      server:
-        type: SYNC
-        sse-endpoint: /mcp/sse
 
   cache:
     type: caffeine
@@ -33,6 +31,9 @@ spring:
   web:
     error:
       include-message: always
+  mvc:
+    async:
+      request-timeout: 10000
 
   security:
     oauth2:
