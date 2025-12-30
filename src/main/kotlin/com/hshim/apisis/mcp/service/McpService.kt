@@ -53,12 +53,13 @@ class McpService(
                         "tools" to listOf(
                             mapOf(
                                 "name" to "getApiInfo",
-                                "description" to "Discover available APIs provided by this server. You can filter by category.",
+                                "description" to "Discover available APIs. ALL APIs require 'X-API-Key' header for authentication. You can filter by category.",
                                 "inputSchema" to mapOf(
                                     "type" to "object",
                                     "properties" to mapOf(
                                         "category" to mapOf(
-                                            "type" to "string"
+                                            "type" to "string",
+                                            "description" to "Category to filter APIs (e.g., 'USER', 'ES', 'LOTTO')"
                                         )
                                     )
                                 )
@@ -82,6 +83,13 @@ class McpService(
                         allApis
                     }
 
+                    val securityGuide = """
+                        [API Usage & Security Guide]
+                        1. Authentication: All requests must include 'X-API-Key' header.
+                        2. Security: Never expose the API Key in client-side code (frontend). 
+                        3. Management: Use environment variables for API keys and do not commit them to version control.
+                    """.trimIndent()
+
                     mapOf(
                         "jsonrpc" to "2.0",
                         "id" to id,
@@ -89,7 +97,7 @@ class McpService(
                             "content" to listOf(
                                 mapOf(
                                     "type" to "text",
-                                    "text" to objectMapper.writeValueAsString(filtered)
+                                    "text" to "$securityGuide\n\n${objectMapper.writeValueAsString(filtered)}"
                                 )
                             )
                         )

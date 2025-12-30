@@ -118,21 +118,48 @@ com.hshim.apisis/
 4. `src/test/kotlin/com/hshim/apisis/api/{새로운-api-이름}`에 테스트 추가
 5. API 엔드포인트 문서화
 
-## 🤝 기여하기
+## 🔌 MCP (Model Context Protocol) 연동
 
-기여는 언제나 환영합니다! Pull Request를 자유롭게 제출해주세요.
+Apisis는 AI 모델(Claude 등)이 실시간으로 API 명세를 읽고 활용할 수 있도록 MCP 서버 기능을 제공합니다.
 
-1. 저장소 포크
-2. 기능 브랜치 생성 (`git checkout -b feature/amazing-api`)
-3. 변경사항 커밋 (`git commit -m 'Add some amazing API'`)
-4. 브랜치에 푸시 (`git push origin feature/amazing-api`)
-5. Pull Request 오픈
+### Claude Desktop 연동 방법 (원격)
 
-## 📝 라이선스
+1. Claude Desktop 설정 파일(`claude_desktop_config.json`)을 엽니다.
+   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+2. `mcpServers` 항목에 아래 내용을 추가합니다.
 
-이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다. 자세한 내용은 LICENSE 파일을 참조하세요.
+```json
+{
+  "mcpServers": {
+    "apisis": {
+      "url": "https://apisis.dev/mcp/sse"
+    }
+  }
+}
+```
 
-## 🔧 기술 스택
+3. Claude Desktop을 재시작하면 우측 하단에 🔌 아이콘이 나타나며 Apisis API 도구를 사용할 수 있습니다.
+
+---
+
+## 🔐 API 사용법 및 보안 가이드
+
+Apisis의 모든 API 호출에는 인증이 필요합니다.
+
+### 인증 방법
+- **Header**: `X-API-Key`
+- **Value**: Apisis 서비스 내 마이페이지에서 발급받은 API Key
+
+### 보안 권장사항
+1. **코드 내 하드코딩 금지**: API Key를 소스 코드에 직접 적지 마세요.
+2. **환경 변수 사용**: `.env` 파일이나 시스템 환경 변수를 통해 키를 관리하고, `.env` 파일은 절대 Git에 포함시키지 마세요 (`.gitignore` 확인).
+3. **클라이언트 측 노출 주의**: 브라우저(Frontend) 코드에서 API Key를 직접 사용하면 사용자에게 노출됩니다. 반드시 Backend를 거쳐 호출하거나 서버 간 통신(Server-to-Server)에만 사용하세요.
+4. **연동 설정 주의**: Claude Desktop 설정 파일(`claude_desktop_config.json`)은 개인적인 설정이므로 타인에게 공유하거나 공개된 저장소에 올리지 않도록 주의하세요.
+
+---
+
+## 🛠 기술 스택
 
 - **언어**: Kotlin 2.2.21
 - **프레임워크**: Spring Boot 4.0.0
@@ -148,5 +175,9 @@ com.hshim.apisis/
 - 이슈: [GitHub Issues](https://github.com/yourusername/apisis/issues)
 
 ---
+
+## 📝 라이선스
+
+이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다. 자세한 내용은 LICENSE 파일을 참조하세요.
 
 APIsis 팀이 ❤️를 담아 만들었습니다
