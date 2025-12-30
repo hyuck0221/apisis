@@ -34,6 +34,101 @@ async function loadAPIDocs() {
             return acc;
         }, {});
 
+        // 공통 Response 형식 섹션 HTML
+        const commonResponseSection = `
+            <div class="common-response-section" id="common-response">
+                <div class="common-response-header">
+                    <h2 class="common-response-title">📦 공통 Response 형식</h2>
+                    <p class="common-response-description">
+                        모든 Open API는 아래의 Envelope 구조로 감싸져서 응답됩니다.
+                        실제 API 응답 데이터는 <code>payload</code> 필드에 담깁니다.
+                    </p>
+                </div>
+                <div class="schema-content" data-schema='${JSON.stringify({
+                    title: "string",
+                    version: "string",
+                    current: 1,
+                    limit: 100,
+                    timestamp: "2024-01-01T00:00:00",
+                    payload: "실제 API Response 객체",
+                    processMs: 123
+                })}'>
+                    <button class="schema-copy-btn" onclick="copySchemaFromParent(this)" title="복사">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        복사
+                    </button>
+                    <pre>{
+  <span class="json-key">"title"</span>: <span class="json-string">"API 제목"</span>,
+  <span class="json-key">"version"</span>: <span class="json-string">"API 버전"</span>,
+  <span class="json-key">"current"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"limit"</span>: <span class="json-number">100</span> <span class="json-comment">// 호출 제한 (없으면 null)</span>,
+  <span class="json-key">"timestamp"</span>: <span class="json-string">"응답 시간"</span>,
+  <span class="json-key">"payload"</span>: { <span class="json-comment">/* 실제 API Response 객체 */</span> },
+  <span class="json-key">"processMs"</span>: <span class="json-number">123</span> <span class="json-comment">// 처리 시간(ms)</span>
+}</pre>
+                </div>
+                <div class="field-info-table" style="margin-top: 16px;">
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>필드명</th>
+                                <th>타입</th>
+                                <th>속성</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="field-path"><code>title</code></td>
+                                <td class="field-type"><code>String</code></td>
+                                <td class="field-badges"><span class="required-badge">required</span></td>
+                                <td class="field-description">API 제목</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>version</code></td>
+                                <td class="field-type"><code>String</code></td>
+                                <td class="field-badges"><span class="required-badge">required</span></td>
+                                <td class="field-description">API 버전</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>current</code></td>
+                                <td class="field-type"><code>Long</code></td>
+                                <td class="field-badges"><span class="required-badge">required</span></td>
+                                <td class="field-description">현재 호출 횟수</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>limit</code></td>
+                                <td class="field-type"><code>Long</code></td>
+                                <td class="field-badges"><span class="nullable-badge">nullable</span></td>
+                                <td class="field-description">호출 제한</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>timestamp</code></td>
+                                <td class="field-type"><code>String</code></td>
+                                <td class="field-badges"><span class="required-badge">required</span></td>
+                                <td class="field-description">응답 타임스탬프 (ISO-8601 형식)</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>payload</code></td>
+                                <td class="field-type"><code>T (Generic)</code></td>
+                                <td class="field-badges"><span class="nullable-badge">nullable</span></td>
+                                <td class="field-description">실제 API 응답 데이터</td>
+                            </tr>
+                            <tr>
+                                <td class="field-path"><code>processMs</code></td>
+                                <td class="field-type"><code>Long</code></td>
+                                <td class="field-badges"><span class="required-badge">required</span></td>
+                                <td class="field-description">서버 처리 시간 (밀리초)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
         // 카테고리별 HTML 생성
         const html = Object.entries(categorizedAPIs).map(([category, categoryAPIs]) => {
             const categoryId = getCategoryId(category);
@@ -61,7 +156,7 @@ async function loadAPIDocs() {
             `;
         }).join('');
 
-        contentContainer.innerHTML = html;
+        contentContainer.innerHTML = commonResponseSection + html;
 
         // 저장된 카테고리 상태 복원
         const savedExpandedCategories = sessionStorage.getItem('expandedCategories');
@@ -179,7 +274,17 @@ function generateAPIItem(api) {
             ` : ''}
 
             <div class="schema-section">
-                <div class="schema-title">Response</div>
+                <div class="schema-title-with-link">
+                    <div class="schema-title">Response</div>
+                    <button class="common-response-link-btn" onclick="event.stopPropagation(); scrollToCommonResponse()" title="공통 Response 형식 보기">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        공통 Response 확인
+                    </button>
+                </div>
                 ${hasResponseInfos ? `
                     <div class="field-info-table">
                         ${renderFieldInfoTable(api.responseInfos)}
@@ -370,6 +475,22 @@ function scrollToAPI(apiId) {
 
         // 스크롤
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// 공통 Response 섹션으로 스크롤
+function scrollToCommonResponse() {
+    const element = document.getElementById('common-response');
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // 하이라이트 효과 추가
+        element.style.transition = 'background-color 0.3s ease';
+        element.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+
+        setTimeout(() => {
+            element.style.backgroundColor = '';
+        }, 1500);
     }
 }
 

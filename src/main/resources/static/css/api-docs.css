@@ -731,3 +731,130 @@
         padding-top: 32px;
     }
 }
+
+/* 공통 Response 섹션 */
+.common-response-section {
+    margin-bottom: 32px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid #40E0D0;
+    padding: 24px;
+    scroll-margin-top: 80px;
+    transition: background-color 0.3s ease;
+}
+
+.common-response-header {
+    margin-bottom: 20px;
+}
+
+.common-response-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.common-response-description {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.common-response-description code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    color: #0066cc;
+}
+
+/* Response 제목과 버튼 컨테이너 */
+.schema-title-with-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+/* 공통 Response 확인 버튼 */
+.common-response-link-btn {
+    background: linear-gradient(135deg, #40E0D0 0%, #1ABC9C 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(64, 224, 208, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.common-response-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(64, 224, 208, 0.4);
+    background: linear-gradient(135deg, #1ABC9C 0%, #16A085 100%);
+}
+
+/* JSON 주석 스타일 */
+.json-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+/* 모바일 반응형 - 공통 Response 섹션 */
+@media (max-width: 768px) {
+    .common-response-section {
+        padding: 20px;
+        margin-bottom: 24px;
+        border-radius: 12px;
+    }
+
+    .common-response-title {
+        font-size: 20px;
+    }
+
+    .common-response-description {
+        font-size: 13px;
+    }
+
+    .schema-title-with-link {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .common-response-link-btn {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .common-response-section {
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .common-response-title {
+        font-size: 18px;
+    }
+
+    .common-response-description {
+        font-size: 12px;
+    }
+}

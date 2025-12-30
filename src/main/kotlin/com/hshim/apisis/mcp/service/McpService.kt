@@ -87,8 +87,24 @@ class McpService(
                         [Apisis API Information]
                         1. Base URL: https://apisis.dev
                         2. Authentication: All requests must include 'X-API-Key' header.
-                        3. Security: Never expose the API Key in client-side code (frontend). 
+                        3. Security: Never expose the API Key in client-side code (frontend).
                         4. Management: Use environment variables for API keys and do not commit them to version control.
+
+                        [Response Format]
+                        All Open APIs return responses wrapped in an Envelope structure:
+                        {
+                          "title": "API title",
+                          "version": "API version",
+                          "current": 1,              // Current API call count
+                          "limit": 100,              // API call limit (null if unlimited)
+                          "timestamp": "2024-01-01T00:00:00",  // Response timestamp (ISO-8601)
+                          "payload": { /* Actual API response data */ },
+                          "processMs": 123           // Server processing time in milliseconds
+                        }
+
+                        The actual API response data is always in the "payload" field.
+                        Use "current" and "limit" fields to track API usage.
+                        Use "processMs" field to monitor API performance.
                     """.trimIndent()
 
                     mapOf(

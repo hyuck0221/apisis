@@ -42,16 +42,38 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
             if (info != null) {
 
                 val requestParams = handlerMethod.method.parameters
-                    .filter { !it.type.name.contains("Model") && it.type != Pageable::class.java }
+                    .filter { !it.type.name.contains("Model") }
 
                 val requestSchema = mutableMapOf<String, Any>()
                 val requestInfos = mutableListOf<FieldInfo>()
 
                 requestParams.forEach { param ->
                     val paramType = detectParameterType(param)
-                    val fields = extractFieldInfos(param.type, paramType)
-                    requestInfos.addAll(fields)
-                    requestSchema.putAll(buildSchema(param.type))
+
+                    when {
+                        // Pageable 처리
+                        param.type == Pageable::class.java -> {
+                            requestInfos.add(FieldInfo("page", "int", "페이지 번호 (0부터 시작)", true, ParameterType.QUERY))
+                            requestInfos.add(FieldInfo("size", "int", "페이지 크기", true, ParameterType.QUERY))
+                            requestInfos.add(FieldInfo("sort", "String", "정렬 조건 (예: name,asc)", true, ParameterType.QUERY))
+                            requestSchema["page"] = "int"
+                            requestSchema["size"] = "int"
+                            requestSchema["sort"] = "String"
+                        }
+                        // @PathVariable 처리
+                        paramType == ParameterType.PATH -> {
+                            val pathVariableName = getPathVariableName(param)
+                            val typeName = param.type.simpleName
+                            requestInfos.add(FieldInfo(pathVariableName, typeName, "경로 변수", false, ParameterType.PATH))
+                            requestSchema[pathVariableName] = typeName
+                        }
+                        // 일반 파라미터 처리
+                        else -> {
+                            val fields = extractFieldInfos(param.type, paramType)
+                            requestInfos.addAll(fields)
+                            requestSchema.putAll(buildSchema(param.type))
+                        }
+                    }
                 }
 
                 val resType = extractActualResponseClass(handlerMethod.method.genericReturnType)
@@ -83,6 +105,15 @@ class APIInfoComponent(private val handlerMapping: RequestMappingHandlerMapping)
             param.isAnnotationPresent(RequestHeader::class.java) -> ParameterType.HEADER
             param.isAnnotationPresent(RequestParam::class.java) -> ParameterType.QUERY
             else -> ParameterType.QUERY
+        }
+    }
+
+    private fun getPathVariableName(param: Parameter): String {
+        val pathVariableAnnotation = param.getAnnotation(PathVariable::class.java)
+        return when {
+            pathVariableAnnotation.value.isNotEmpty() -> pathVariableAnnotation.value
+            pathVariableAnnotation.name.isNotEmpty() -> pathVariableAnnotation.name
+            else -> param.name
         }
     }
 
