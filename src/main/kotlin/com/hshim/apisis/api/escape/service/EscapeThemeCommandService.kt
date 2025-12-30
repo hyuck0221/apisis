@@ -18,10 +18,12 @@ class EscapeThemeCommandService(
     private val escapeThemeQueryService: EscapeThemeQueryService,
     private val properties: EscapeCrawlingProperties,
 ) {
-    fun init(requests: List<EscapeThemeRequest>) {
+    fun apply(requests: List<EscapeThemeRequest>) {
         val themeMap = escapeThemeRepository.findAllById(requests.map { it.refId }).associateBy { it.refId }
         requests.forEach { request ->
-            if (!themeMap.contains(request.refId)) escapeThemeRepository.save(request.toEntity())
+            val existsTheme = themeMap[request.refId]
+            if (existsTheme == null) escapeThemeRepository.save(request.toEntity())
+            else request.updateTo(existsTheme)
         }
     }
 
@@ -46,8 +48,31 @@ class EscapeThemeCommandService(
                     ?: escapeCafeCommandService.init(EscapeCafeRequest(hit)).id
                 EscapeThemeRequest(properties.photoBaseUrl, hit, cafeId)
             }
-            init(requests)
+            apply(requests)
             currentId += sliceCnt
         }
+    }
+
+    fun updateSliceTheme() {
+        val sliceCnt = 500
+
+        val firstTheme = escapeThemeRepository.findTopByOrderByUpdateDateAsc() ?: return
+        val pageable = PageRequest.of(firstTheme.refId.toInt() / sliceCnt, sliceCnt)
+        val condition = EscapeThemeOpenAPISearchCondition().apply {
+            val start = pageable.pageSize * pageable.pageNumber
+            val end = start + pageable.pageSize
+            filters.addAll(listOf("ref_id>=$start", "ref_id<$end"))
+        }
+        val hits = escapeThemeQueryService.findAllHitPageByOpenAPI(condition, pageable).content
+
+        val cafeMap = escapeCafeQueryService.findAllByNames(hits.map { it.store_name })
+            .associateBy { it.name to it.location to it.area }
+
+        val requests = hits.mapNotNull { hit ->
+            cafeMap[hit.store_name to hit.location to hit.area]?.id
+                ?.let { EscapeThemeRequest(properties.photoBaseUrl, hit, it) }
+        }
+
+        apply(requests)
     }
 }

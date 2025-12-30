@@ -2,6 +2,7 @@ package com.hshim.apisis.api.escape.model
 
 import com.hshim.apisis.api.escape.entity.EscapeCafe
 import com.hshim.apisis.api.escape.entity.EscapeTheme
+import java.time.LocalDateTime
 
 class EscapeThemeRequest(
     val refId: Long,
@@ -58,4 +59,22 @@ class EscapeThemeRequest(
         interior = this.interior,
         act = this.act,
     )
+
+    fun updateTo(theme: EscapeTheme) {
+        theme.name = this.name
+        theme.description = this.description
+        theme.isOpen = this.isOpen
+        theme.photoUrl = this.photoUrl
+        theme.playtime = this.playtime
+        theme.price = this.price
+        theme.difficulty = this.difficulty
+        theme.fear = this.fear
+        theme.activity = this.activity
+        theme.satisfy = this.satisfy
+        theme.problem = this.problem
+        theme.story = this.story
+        theme.interior = this.interior
+        theme.act = this.act
+        theme.updateDate = LocalDateTime.now()
+    }
 }

@@ -21,11 +21,12 @@ class EscapeThemeOpenAPISearchCondition(
         q = search,
         limit = pageable.pageSize,
         offset = 0,
-        filter = filters + buildPageFilter(pageable),
+        filter = getPageFilter(pageable),
         sort = sorts,
     )
 
-    fun buildPageFilter(pageable: Pageable): List<String> {
+    fun getPageFilter(pageable: Pageable): List<String> {
+        if (filters.isNotEmpty()) return filters
         val start = pageable.pageSize * pageable.pageNumber
         val end = start + pageable.pageSize
         return listOf("ref_id>$start", "ref_id<=$end")

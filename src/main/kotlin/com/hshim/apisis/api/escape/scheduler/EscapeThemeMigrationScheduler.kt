@@ -17,4 +17,11 @@ class EscapeThemeMigrationScheduler(private val escapeThemeCommandService: Escap
         escapeThemeCommandService.migration()
         log.info("[Escape] theme migration finish===")
     }
+
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
+    fun updateSliceTheme() {
+        log.info("[Escape] theme update start===")
+        escapeThemeCommandService.updateSliceTheme()
+        log.info("[Escape] theme update finish===")
+    }
 }
