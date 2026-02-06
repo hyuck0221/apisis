@@ -53,6 +53,9 @@ class EscapeThemeResponse(
     @FieldDescription("연기력 (0-5)")
     val act: Double,
 
+    @FieldDescription("리뷰 정보")
+    val review: EscapeReviewResponse?,
+
     @FieldDescription("등록일자")
     val createDate: String,
 ) {
@@ -73,6 +76,7 @@ class EscapeThemeResponse(
         story = escapeTheme.story,
         interior = escapeTheme.interior,
         act = escapeTheme.act,
+        review = escapeTheme.review?.let { EscapeReviewResponse(it) },
         createDate = escapeTheme.createDate.dateToString(),
     )
 }

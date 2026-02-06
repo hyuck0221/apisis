@@ -10,3 +10,9 @@ data class EscapeCrawlingProperties(
     var crawlingAuthorization: String = "",
     var photoBaseUrl: String = "",
 )
+
+@Configuration
+@ConfigurationProperties(prefix = "escape.review")
+data class EscapeReviewProperties(
+    var url: String = "",
+)

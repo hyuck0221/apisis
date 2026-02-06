@@ -55,4 +55,10 @@ data class EscapeTheme(
     @Column(nullable = false)
     var act: Double,
 
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+    @OneToMany(targetEntity = EscapeReview::class, mappedBy = "escapeTheme", cascade = [CascadeType.ALL])
+    var reviews: MutableSet<EscapeReview> = mutableSetOf()
+
+    val review: EscapeReview?
+        get() = reviews.firstOrNull()
+}

@@ -87,6 +87,8 @@ escape:
     crawling-url: https://q.keigon.net/indexes/qrooms/search
     crawling-authorization: Bearer ${ESCAPE_CRAWLING_TOKEN:F3WdGD8S3783e99ba7d4508fa06c0dc6d1822e2bd73b87bfe2dd204eae14eb34220cda75}
     photo-base-url: https://cdn.keigon.net
+  review:
+    url: https://docs.google.com/spreadsheets/d/1f73hTHz50lqkuXD3KLy0Al7yUK80JSqrC0iUH3Xakwg/export?format=xlsx&id=1f73hTHz50lqkuXD3KLy0Al7yUK80JSqrC0iUH3Xakwg
 
 lotto:
   api-url: https://www.dhlottery.co.kr/common.do?method=getLottoNumber

@@ -71,4 +71,10 @@ interface EscapeThemeRepository : JpaRepository<EscapeTheme, Long> {
     fun findTopBy(): EscapeTheme?
 
     fun findTopByOrderByUpdateDateAsc(): EscapeTheme?
+
+    @Query(
+        nativeQuery = true,
+        value = "select t.* from escape_theme t where replace(t.name, ' ', '') like concat('%', :name, '%') limit 1"
+    )
+    fun findTopByNameContains(name: String): EscapeTheme?
 }

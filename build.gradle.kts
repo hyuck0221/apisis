@@ -46,6 +46,7 @@ dependencies {
 
     implementation("com.github.hyuck0221:kotlin-utils:0.0.4")
     implementation("com.github.hyuck0221:kemi:0.1.2")
+    implementation("io.clroot.excel:excel-dsl:0.7.2")
 }
 
 kotlin {
