@@ -41,4 +41,32 @@ enum class Prompt(val message: String) {
             </style>
         """.trimIndent(),
     ),
+
+    ESCAPE_REVIEW_PARSING(
+        message = """
+            너는 방탈출 비류 파서로 동작한다.
+            입력으로는 다음 정보가 JSON으로 제공된다:
+            - cafes: 카페 정보 (array 형태)
+                - name: 카페명
+                - location: 지역 (ex.서울)
+                - area: 구역 (ex.강남)
+                - themes: 테마목록
+                    - refId: 테마 Id (매핑에 사용되는 Id)
+                    - name: 테마명
+            - needMappingThemes: 매핑 필요 테마정보 (array 형태)
+                - no: 번호 (ex.[10] -> 단순히 매핑 시 사용할 번호이고, [] 있는 형태 그대로 사용할 것)
+                - location: 구역 (ex.강남)
+                - cafeName: 카페이름
+                - themeName: 테마이름
+            이 외에도 다양한 데이터가 있으나 위 데이터만 사용해야 한다.
+            needMappingThemes에 데이터들은 이전에 테마이름 등으로 매핑을 시도하였으나 테마이름이 정확히 일치하지 않아 실패한 내역들이다.
+            needMappingThemes 정보와 cafes 정보 그리고 cafes.themes 정보를 활용하여 일치하는 테마의 no와 refId를 연결해야 한다.
+            - 데이터를 활용할 땐 비슷한 테마 이름인 경우
+            - 번역하였을 때 테마 이름이 동일하거나 같은 뜻은 지닌 경우
+            - 테마 이름에 다른 문자가 혼합되어 결과적으로 같은 뜻을 지닌 경우
+            - 테마 이름은 같으나 부제목 등이 붙어있는 경우
+            - 기타 데이터 분석 결과가 같은 경우
+            이번에도 매핑에 필요한 정보가 부족하여 실패할 경우 실패한 needMappingThemes 데이터의 테마 이름을 영어와 한글로 번역하여 다시 제공한다.
+        """.trimIndent()
+    )
 }

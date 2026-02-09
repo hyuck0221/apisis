@@ -6,7 +6,7 @@ import io.clroot.excel.annotation.Excel
 @Excel
 data class EscapeReviewRecommendedModel(
     @Column("번호") val no: String?,
-    @Column("지역") val area: String?,
+    @Column("지역") val location: String?,
     @Column("지점명") val cafeName: String?,
     @Column("호점") val locationDetail: String?,
     @Column("테마명") val themeName: String?,
@@ -17,6 +17,7 @@ data class EscapeReviewRecommendedModel(
 ) {
     fun toRequest() = EscapeReviewRequest(
         no = no ?: "",
+        location = location ?: "",
         cafeName = cafeName ?: "",
         themeName = themeName ?: "",
         difficulty = difficulty,

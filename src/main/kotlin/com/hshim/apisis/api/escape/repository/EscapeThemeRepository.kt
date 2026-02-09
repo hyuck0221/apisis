@@ -74,7 +74,40 @@ interface EscapeThemeRepository : JpaRepository<EscapeTheme, Long> {
 
     @Query(
         nativeQuery = true,
-        value = "select t.* from escape_theme t where replace(t.name, ' ', '') like concat('%', :name, '%') limit 1"
+        value = """
+            select t.* from escape_theme t inner join escape_cafe c on t.escape_cafe = c.id 
+            where replace(t.name, ' ', '') = replace(:themeName, ' ', '') 
+            and replace(c.name, ' ', '') = replace(:cafeName, ' ', '') 
+            limit 1
+        """
     )
-    fun findTopByNameContains(name: String): EscapeTheme?
+    fun findByEscapeCafeNameAndName(cafeName: String, themeName: String): EscapeTheme?
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            select t.* from escape_theme t inner join escape_cafe c on t.escape_cafe = c.id 
+            where replace(t.name, ' ', '') = replace(:themeName, ' ', '')  
+            and c.location = :location
+            limit 1
+        """
+    )
+    fun findByEscapeCafeLocationAndName(location: String, themeName: String): EscapeTheme?
+
+    @Query(
+        nativeQuery = true,
+        value = "select t.* from escape_theme t where replace(t.name, ' ', '') = replace(:name, ' ', '') limit 1"
+    )
+    fun findTopByName(name: String): EscapeTheme?
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            select t.* from escape_theme t 
+            where replace(t.name, ' ', '') = replace(:name1, ' ', '') 
+            or replace(t.name, ' ', '') = replace(:name2, ' ', '') 
+            limit 1
+        """
+    )
+    fun findTopByNameOr(name1: String, name2: String): EscapeTheme?
 }

@@ -5,6 +5,7 @@ import com.hshim.apisis.api.escape.entity.EscapeTheme
 
 data class EscapeReviewRequest(
     var no: String,
+    var location: String,
     var cafeName: String,
     var themeName: String,
     var average: Double? = null,
