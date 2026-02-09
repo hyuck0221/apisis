@@ -58,4 +58,6 @@ interface EscapeCafeRepository : JpaRepository<EscapeCafe, String> {
         maxLng: Double,
         onlyOpen: Boolean
     ): List<EscapeCafe>
+
+    fun findAllByNameContains(name: String): List<EscapeCafe>
 }

@@ -12,7 +12,6 @@ import com.hshim.apisis.api.escape.repository.EscapeCafeRepository
 import com.hshim.apisis.api.escape.repository.EscapeReviewRepository
 import com.hshim.apisis.api.escape.repository.EscapeThemeRepository
 import com.hshim.apisis.properties.EscapeReviewProperties
-import com.hshim.apisis.web.enums.Prompt
 import com.hshim.kemi.GeminiGenerator
 import io.clroot.excel.parser.ParseResult
 import io.clroot.excel.parser.parseExcel
@@ -117,7 +116,7 @@ class EscapeReviewCommandService(
 
     fun initByAI(requests: List<EscapeReviewRequest>): List<EscapeReview> {
         if (requests.isEmpty()) return emptyList()
-        val cafes = escapeCafeRepository.findAllByNameIn(requests.map { it.cafeName }.toSet().toList())
+        val cafes = requests.map { it.cafeName }.toSet().flatMap { escapeCafeRepository.findAllByNameContains(it) }
         val themes = escapeThemeQueryService.findAllByCafes(cafes)
         val cafeToThemes = themes.groupBy { it.escapeCafe }
         val refIdToTheme = themes.associateBy { it.refId }
