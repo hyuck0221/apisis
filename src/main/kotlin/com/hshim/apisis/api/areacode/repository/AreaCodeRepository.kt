@@ -13,11 +13,11 @@ interface AreaCodeRepository : JpaRepository<AreaCode, String> {
     @Query(
         """
             select ac from AreaCode ac
-            where ac.code like concat('%', :code, '%') 
-            and ac.address like concat('%', :address, '%')
-            and ac.city like concat('%', :city, '%')
-            and ac.town like concat('%', :town, '%')
-            and ac.village like concat('%', :village, '%')
+            where (:code is null or ac.code like concat('%', :code, '%')) 
+            and (:address is null or ac.address like concat('%', :address, '%')) 
+            and (:city is null or ac.city like concat('%', :city, '%')) 
+            and (:town is null or ac.town like concat('%', :town, '%')) 
+            and (:village is null or ac.village like concat('%', :village, '%')) 
         """
     )
     fun findAllBySearch(
