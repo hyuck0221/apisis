@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 class LottoController(private val lottoQueryService: LottoQueryService) {
     @Information(
         category = "로또",
-        title = "URL로 번호 조회",
+        title = "URL로 로또 번호 조회",
         description = "로또 용지에 QR 인식 시 나오는 URL로 회차와 번호를 찾아냅니다",
         version = "1.0",
         callLimitFree = 500,
@@ -30,7 +30,7 @@ class LottoController(private val lottoQueryService: LottoQueryService) {
 
     @Information(
         category = "로또",
-        title = "결과 조회",
+        title = "로또 결과 조회",
         description = "회차로 로또 결과를 조회합니다",
         version = "1.0",
         callLimitFree = 200,

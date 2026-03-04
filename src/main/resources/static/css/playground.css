@@ -392,6 +392,10 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 0;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 /* 반응형 */

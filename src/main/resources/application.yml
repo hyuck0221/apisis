@@ -1,6 +1,8 @@
 server:
   port: 8080
   shutdown: graceful
+  error:
+    include-message: always
 
 spring:
   lifecycle:
@@ -28,9 +30,6 @@ spring:
     type: caffeine
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=1h
-  web:
-    error:
-      include-message: always
   mvc:
     async:
       request-timeout: 10000
@@ -92,3 +91,9 @@ escape:
 
 lotto:
   api-url: https://www.dhlottery.co.kr/common.do?method=getLottoNumber
+
+random-org:
+  url: https://www.random.org
+
+exchange:
+  url: http://www.smbs.biz/Flash/TodayExRate_flash.jsp
