@@ -8,7 +8,9 @@ import com.hshim.apisis.api.escape.model.EscapeThemeOpenAPISearchCondition
 import com.hshim.apisis.api.escape.model.EscapeThemeResponse
 import com.hshim.apisis.api.escape.model.EscapeThemeSearchCondition
 import com.hshim.apisis.api.escape.repository.EscapeThemeRepository
+import com.hshim.apisis.config.CacheConfig
 import com.hshim.apisis.properties.EscapeCrawlingProperties
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -36,10 +38,12 @@ class EscapeThemeQueryService(
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "escape theme not found")
     }
 
+    @Cacheable(cacheNames = [CacheConfig.ESCAPE_THEME_SEARCH_BY_CAFES])
     fun findAllByCafes(cafes: List<EscapeCafe>): List<EscapeTheme> {
         return escapeThemeRepository.findAllByEscapeCafeIn(cafes)
     }
 
+    @Cacheable(cacheNames = [CacheConfig.ESCAPE_THEME_SEARCH])
     fun findAllPageBy(condition: EscapeThemeSearchCondition, pageable: Pageable): Page<EscapeTheme> {
         return escapeThemeRepository.findAllByCondition(
             search = condition.search ?: "",

@@ -5,6 +5,8 @@ import com.hshim.apisis.api.escape.model.EscapeCafeBoundsSearchCondition
 import com.hshim.apisis.api.escape.model.EscapeCafeLocationResponse
 import com.hshim.apisis.api.escape.model.EscapeCafeSearchCondition
 import com.hshim.apisis.api.escape.repository.EscapeCafeRepository
+import com.hshim.apisis.config.CacheConfig
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -27,6 +29,7 @@ class EscapeCafeQueryService(private val escapeCafeRepository: EscapeCafeReposit
             .map { EscapeCafeLocationResponse(it) }
     }
 
+    @Cacheable(cacheNames = [CacheConfig.ESCAPE_CAFE_SEARCH])
     fun findAllPageBy(condition: EscapeCafeSearchCondition, pageable: Pageable): Page<EscapeCafe> {
         return escapeCafeRepository.findAllBySearch(
             condition.search ?: "",

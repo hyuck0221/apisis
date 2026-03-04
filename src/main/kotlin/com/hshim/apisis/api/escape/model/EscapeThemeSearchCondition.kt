@@ -2,7 +2,7 @@ package com.hshim.apisis.api.escape.model
 
 import com.hshim.apisis.common.annotation.FieldDescription
 
-class EscapeThemeSearchCondition(
+data class EscapeThemeSearchCondition(
     @FieldDescription("검색어")
     val search: String?,
 
