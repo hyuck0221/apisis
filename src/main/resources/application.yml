@@ -97,3 +97,6 @@ random-org:
 
 exchange:
   url: http://www.smbs.biz/Flash/TodayExRate_flash.jsp
+
+short-url:
+  url: https://lrl.kr

@@ -44,6 +44,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.google.zxing:javase:3.5.3")
     implementation("com.github.hyuck0221:kotlin-utils:0.0.4")
     implementation("com.github.hyuck0221:kemi:0.1.2")
     implementation("io.clroot.excel:excel-dsl:0.7.2")
