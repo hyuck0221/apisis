@@ -52,16 +52,30 @@ class McpService(
                     "result" to mapOf(
                         "tools" to listOf(
                             mapOf(
-                                "name" to "getApiInfo",
-                                "description" to "Discover available APIs. ALL APIs require 'X-API-Key' header for authentication. You can filter by category.",
+                                "name" to "getApiList",
+                                "description" to "Get a list of all available APIs with their title, description, and category. This is useful for discovering what APIs are available.",
                                 "inputSchema" to mapOf(
                                     "type" to "object",
                                     "properties" to mapOf(
                                         "category" to mapOf(
                                             "type" to "string",
-                                            "description" to "Category to filter APIs (e.g., 'USER', 'ES', 'LOTTO')"
+                                            "description" to "Optional category to filter APIs (e.g., 'USER', 'ES', 'LOTTO')"
                                         )
                                     )
+                                )
+                            ),
+                            mapOf(
+                                "name" to "getApiDetail",
+                                "description" to "Get full detailed information for a specific API by its title. Use getApiList first to find the exact title.",
+                                "inputSchema" to mapOf(
+                                    "type" to "object",
+                                    "properties" to mapOf(
+                                        "title" to mapOf(
+                                            "type" to "string",
+                                            "description" to "The exact title of the API as returned by getApiList"
+                                        )
+                                    ),
+                                    "required" to listOf("title")
                                 )
                             )
                         )
@@ -73,54 +87,85 @@ class McpService(
                 val name = params?.get("name") as? String
                 val arguments = params?.get("arguments") as? Map<String, Any?>
 
-                if (name == "getApiInfo") {
-                    val category = arguments?.get("category") as? String
-                    val allApis = apiInfoComponent.getAPIInfos()
-                    
-                    val filtered = if (!category.isNullOrBlank()) {
-                        allApis.filter { it.category.equals(category, ignoreCase = true) }
-                    } else {
-                        allApis
-                    }
-
-                    val securityGuide = """
-                        [Apisis API Information]
-                        1. Base URL: https://apisis.dev
-                        2. Authentication: All requests must include 'X-API-Key' header.
-                        3. Security: Never expose the API Key in client-side code (frontend).
-                        4. Management: Use environment variables for API keys and do not commit them to version control.
-
-                        [Response Format]
-                        All Open APIs return responses wrapped in an Envelope structure:
-                        {
-                          "title": "API title",
-                          "version": "API version",
-                          "current": 1,              // Current API call count
-                          "limit": 100,              // API call limit (null if unlimited)
-                          "timestamp": "2024-01-01T00:00:00",  // Response timestamp (ISO-8601)
-                          "payload": { /* Actual API response data */ },
-                          "processMs": 123           // Server processing time in milliseconds
+                when (name) {
+                    "getApiList" -> {
+                        val category = arguments?.get("category") as? String
+                        val allApis = apiInfoComponent.getAPIInfos()
+                        
+                        val filtered = if (!category.isNullOrBlank()) {
+                            allApis.filter { it.category.equals(category, ignoreCase = true) }
+                        } else {
+                            allApis
                         }
 
-                        The actual API response data is always in the "payload" field.
-                        Use "current" and "limit" fields to track API usage.
-                        Use "processMs" field to monitor API performance.
-                    """.trimIndent()
+                        val summaries = filtered.map { 
+                            mapOf(
+                                "title" to it.title,
+                                "description" to it.description,
+                                "category" to it.category
+                            )
+                        }
 
-                    mapOf(
-                        "jsonrpc" to "2.0",
-                        "id" to id,
-                        "result" to mapOf(
-                            "content" to listOf(
-                                mapOf(
-                                    "type" to "text",
-                                    "text" to "$securityGuide\n\n${objectMapper.writeValueAsString(filtered)}"
+                        mapOf(
+                            "jsonrpc" to "2.0",
+                            "id" to id,
+                            "result" to mapOf(
+                                "content" to listOf(
+                                    mapOf(
+                                        "type" to "text",
+                                        "text" to objectMapper.writeValueAsString(summaries)
+                                    )
                                 )
                             )
                         )
-                    )
-                } else {
-                    errorResponse(id, -32601, "Method not found")
+                    }
+                    "getApiDetail" -> {
+                        val title = arguments?.get("title") as? String
+                        if (title.isNullOrBlank()) {
+                            return errorResponse(id, -32602, "Title is required")
+                        }
+
+                        val api = apiInfoComponent.getAPIInfos().find { it.title.equals(title, ignoreCase = true) }
+                        if (api == null) {
+                            return errorResponse(id, -32602, "API not found with title: $title")
+                        }
+
+                        val securityGuide = """
+                            [Apisis API Information]
+                            1. Base URL: https://apisis.dev
+                            2. Authentication: All requests must include 'X-API-Key' header.
+                            3. Security: Never expose the API Key in client-side code (frontend).
+                            4. Management: Use environment variables for API keys and do not commit them to version control.
+
+                            [Response Format]
+                            All Open APIs return responses wrapped in an Envelope structure:
+                            {
+                              "title": "API title",
+                              "version": "API version",
+                              "current": 1,              // Current API call count
+                              "limit": 100,              // API call limit (null if unlimited)
+                              "timestamp": "2024-01-01T00:00:00",  // Response timestamp (ISO-8601)
+                              "payload": { /* Actual API response data */ },
+                              "processMs": 123           // Server processing time in milliseconds
+                            }
+
+                            The actual API response data is always in the "payload" field.
+                        """.trimIndent()
+
+                        mapOf(
+                            "jsonrpc" to "2.0",
+                            "id" to id,
+                            "result" to mapOf(
+                                "content" to listOf(
+                                    mapOf(
+                                        "type" to "text",
+                                        "text" to "$securityGuide\n\n${objectMapper.writeValueAsString(api)}"
+                                    )
+                                )
+                            )
+                        )
+                    }
+                    else -> errorResponse(id, -32601, "Method not found: $name")
                 }
             }
             else -> {
