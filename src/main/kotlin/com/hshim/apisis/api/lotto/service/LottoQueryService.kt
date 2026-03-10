@@ -30,7 +30,7 @@ class LottoQueryService(
     fun findByOpenAPI(times: Int): LottoOpenAPIResponse? {
         return try {
             restTemplate.exchange(
-                properties.apiUrl + "&drwNo=$times",
+                properties.apiUrl + "?srchLtEpsd=$times",
                 HttpMethod.GET,
                 null,
                 String::class.java

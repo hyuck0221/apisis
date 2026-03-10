@@ -90,7 +90,7 @@ escape:
     url: https://docs.google.com/spreadsheets/d/1f73hTHz50lqkuXD3KLy0Al7yUK80JSqrC0iUH3Xakwg/export?format=xlsx&id=1f73hTHz50lqkuXD3KLy0Al7yUK80JSqrC0iUH3Xakwg
 
 lotto:
-  api-url: https://www.dhlottery.co.kr/common.do?method=getLottoNumber
+  api-url: https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do
 
 random-org:
   url: https://www.random.org

@@ -16,6 +16,6 @@ class LottoScheduler(private val lottoCommandService: LottoCommandService) {
     fun migration() {
         log.info("[Lotto] migration start")
         lottoCommandService.migration()
-        log.info("[Lotto] theme migration finish")
+        log.info("[Lotto] migration finish")
     }
 }

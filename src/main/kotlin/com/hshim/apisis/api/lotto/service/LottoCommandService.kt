@@ -16,7 +16,7 @@ class LottoCommandService(
     private val log: Logger = LoggerFactory.getLogger(LottoCommandService::class.java)
 
     fun init(times: Int): LottoResponse? {
-        val entity = lottoQueryService.findByOpenAPI(times)?.toEntity() ?: return null
+        val entity = lottoQueryService.findByOpenAPI(times)?.toEntity(times) ?: return null
         return LottoResponse(lottoRepository.save(entity))
     }
 
