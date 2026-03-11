@@ -100,3 +100,6 @@ exchange:
 
 short-url:
   url: https://lrl.kr
+
+apisis:
+  base-url: ${BASE_URL:https://apisis.dev}

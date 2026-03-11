@@ -1,17 +1,21 @@
 package com.hshim.apisis.web
 
+import com.hshim.apisis.api.url.repository.UrlShortRepository
 import com.hshim.apisis.config.JwtUtil
 import com.hshim.apisis.user.repository.UserOAuth2ProviderRepository
 import com.hshim.apisis.user.repository.UserRepository
 import com.hshim.apisis.user.service.UserUtil.getCurrentUserIdOrNull
 import com.hshim.apisis.web.service.AnalyticsSettingQueryService
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.server.ResponseStatusException
 
 @Controller
 class ViewController(
@@ -19,6 +23,7 @@ class ViewController(
     private val analyticsSettingQueryService: AnalyticsSettingQueryService,
     private val jwtUtil: JwtUtil,
     private val userOAuth2ProviderRepository: UserOAuth2ProviderRepository,
+    private val urlShortRepository: UrlShortRepository,
 ) {
 
     @GetMapping("/")
@@ -181,5 +186,15 @@ class ViewController(
         model.addAttribute("userProviders", providers)
         model.addAttribute("analyticsSetting", analyticsSettingQueryService.findBy(userId))
         return "settings"
+    }
+
+    @GetMapping("/url/{id}")
+    @Transactional
+    fun urlShortRedirect(@PathVariable id: String): String {
+        val url = urlShortRepository.findByIdOrNull(id)
+            ?.apply { this.view++ }
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "url not found")
+
+        return "redirect:${url.baseUrl}"
     }
 }
