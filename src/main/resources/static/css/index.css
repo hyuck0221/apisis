@@ -413,106 +413,6 @@ body {
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
-/* 가격 섹션 */
-.pricing-section {
-    background: white;
-}
-
-.pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.pricing-card {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    border: 2px solid #e0e0e0;
-    text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.pricing-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    border-color: #40E0D0;
-}
-
-.pricing-card.featured {
-    border-color: #40E0D0;
-    transform: scale(1.05);
-    box-shadow: 0 20px 50px rgba(64, 224, 208, 0.2);
-}
-
-.popular-badge {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #40E0D0, #1ABC9C);
-    color: white;
-    padding: 8px 24px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.pricing-card h3 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.price {
-    margin-bottom: 30px;
-}
-
-.price-amount {
-    font-size: 48px;
-    font-weight: 800;
-    color: #40E0D0;
-}
-
-.price-period {
-    font-size: 18px;
-    color: #666;
-}
-
-.pricing-features {
-    list-style: none;
-    margin-bottom: 30px;
-    text-align: left;
-    flex-grow: 1;
-}
-
-.pricing-features li {
-    padding: 12px 0;
-    color: #666;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.btn-pricing {
-    display: inline-block;
-    background: linear-gradient(135deg, #40E0D0, #1ABC9C);
-    color: white;
-    padding: 14px 40px;
-    border-radius: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-pricing:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(64, 224, 208, 0.4);
-}
-
 /* CTA 섹션 */
 .cta-section {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -668,7 +568,6 @@ body {
 /* 텍스트 선택 가능한 요소들 */
 .feature-card p,
 .api-card p,
-.pricing-features li,
 .hero-description,
 .cta-content p,
 .section-subtitle {
@@ -695,10 +594,6 @@ body {
     .features-grid,
     .stats-grid,
     .apis-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .pricing-grid {
         grid-template-columns: 1fr;
     }
 
