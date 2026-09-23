@@ -103,3 +103,5 @@ short-url:
 
 apisis:
   base-url: ${BASE_URL:https://apisis.dev}
+  mcp:
+    allowed-origins: ${MCP_ALLOWED_ORIGINS:${BASE_URL:https://apisis.dev}}

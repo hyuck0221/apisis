@@ -133,13 +133,15 @@ Apisis provides an MCP server, allowing AI models like Claude to discover and ut
 {
   "mcpServers": {
     "apisis": {
-      "url": "https://apisis.dev/mcp/sse"
+      "url": "https://apisis.dev/mcp"
     }
   }
 }
 ```
 
-3. Restart Claude Desktop. You should see the 🔌 icon, indicating that the Apisis tools are ready for use.
+3. Restart Claude Desktop. You should see the 🔌 icon, indicating that the Apisis tools are ready for use. The MCP server uses the Streamable HTTP transport at `/mcp`.
+
+For browser-based clients that send an `Origin` header, add their origins to the comma-separated `MCP_ALLOWED_ORIGINS` environment variable (defaults to `BASE_URL`).
 
 ---
 

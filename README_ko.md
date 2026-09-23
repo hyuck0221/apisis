@@ -133,13 +133,15 @@ Apisis는 AI 모델(Claude 등)이 실시간으로 API 명세를 읽고 활용�
 {
   "mcpServers": {
     "apisis": {
-      "url": "https://apisis.dev/mcp/sse"
+      "url": "https://apisis.dev/mcp"
     }
   }
 }
 ```
 
-3. Claude Desktop을 재시작하면 우측 하단에 🔌 아이콘이 나타나며 Apisis API 도구를 사용할 수 있습니다.
+3. Claude Desktop을 재시작하면 우측 하단에 🔌 아이콘이 나타나며 Apisis API 도구를 사용할 수 있습니다. MCP 서버는 `/mcp`에서 Streamable HTTP transport를 사용합니다.
+
+`Origin` 헤더를 보내는 브라우저 기반 클라이언트는 허용할 Origin을 `MCP_ALLOWED_ORIGINS` 환경 변수에 쉼표로 구분해 설정하세요. 기본값은 `BASE_URL`입니다.
 
 ---
 

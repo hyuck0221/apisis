@@ -45,7 +45,7 @@ class SecurityConfig(
                     // 정적 리소스 및 로그인 페이지
                     .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
 
-                    // MCP SSE 엔드포인트 허용 (/mcp/sse, /mcp/message 등)
+                    // MCP HTTP endpoint
                     .requestMatchers("/mcp/**").permitAll()
 
                     // OAuth2 콜백 경로
